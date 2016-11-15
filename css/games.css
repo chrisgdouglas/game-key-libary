@@ -1,0 +1,20 @@
+.label_link {
+  color: white;
+  text-decoration: none;
+}
+.label_link:link  {
+  color: white;
+  text-decoration: none;
+}
+.label_link:hover  {
+  color: white;
+  text-decoration: none;
+}
+.label_link:visited {
+  color: white;
+  text-decoration: none;
+}
+.label_link:active {
+  color: white;
+  text-decoration: none;
+}
