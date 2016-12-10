@@ -7,7 +7,7 @@ parse_str($_SERVER['QUERY_STRING']); //$id
 
 $user_rs = getCurrentUser($db, $id);
 
-$sql = "SELECT game_name, id, purchase_date, store, redeemed, played FROM games WHERE game_owner = :user_id ORDER BY game_name ASC";
+$sql = "SELECT game_name, id, purchase_date, store, redeemed, played FROM games WHERE game_owner = :user_id ORDER BY purchase_date DESC, game_name ASC";
 $statement = $db->prepare($sql);
 $statement->bindParam(':user_id', $user_rs['id'], PDO::PARAM_STR, 37);
 $statement->execute();

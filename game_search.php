@@ -32,7 +32,7 @@ if (isset($_POST['search'])) {
   $sql = $sql . " WHERE CONCAT_WS('', game_name, game_key, notes, store, popular_tags) LIKE CONCAT('%',:search,'%')";
 }
 
-$sql = $sql . " ORDER BY game_name ASC";
+$sql = $sql . " ORDER BY purchase_date DESC, game_name ASC";
 
 $statement = $db->prepare($sql);
 
