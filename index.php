@@ -2,7 +2,7 @@
 require_once getcwd() . '/games.config.php';
 $db = getDBConnect(DSN, DB_USERNAME, DB_PASSWORD);
 
-$sql = "SELECT game_name, id, purchase_date, store, redeemed, played FROM games ORDER BY game_name ASC";
+$sql = "SELECT game_name, id, purchase_date, store, redeemed, played FROM games ORDER BY purchase_date DESC, game_name ASC";
 $statement = $db->prepare($sql);
 $statement->execute();
 $game_list_rs = $statement->fetchAll();
