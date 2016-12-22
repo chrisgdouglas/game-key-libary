@@ -2,11 +2,10 @@
 require_once getcwd() . '/games.config.php';
 $db = getDBConnect(DSN, DB_USERNAME, DB_PASSWORD);
 
-$sql = "SELECT game_name, id, purchase_date, store, redeemed, played FROM games ORDER BY purchase_date DESC, game_name ASC";
+$sql = "SELECT g.id, g.game_name, g.redeemed, g.played, g.notes, g.popular_tags, images.file_path FROM games AS g LEFT JOIN images ON g.image = images.description ORDER BY g.purchase_date DESC, g.game_name ASC LIMIT 12";
 $statement = $db->prepare($sql);
 $statement->execute();
 $game_list_rs = $statement->fetchAll();
-$number_of_rows = $statement->rowCount();
 
 $sql = "SELECT COUNT(id) as count FROM games WHERE redeemed = 'Yes'";
 $redeemed_count = getOne($db, $sql);
@@ -18,6 +17,8 @@ $sql = "SELECT COUNT(id) as count FROM games WHERE played = 1";
 $played_count = getOne($db, $sql);
 $sql = "SELECT ROUND(SUM(cost),2) as sum FROM games";
 $total_cost = getOne($db, $sql);
+$sql = "SELECT COUNT(id) count FROM games";
+$number_of_rows = getOne($db, $sql);
 closeDBConnection($db, $statement);
 
 ?>
@@ -39,6 +40,7 @@ closeDBConnection($db, $statement);
     <link href="/games/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
+    <link href="/games/css/dashboard.css" rel="stylesheet">
     <link href="/games/css/dashboard.css" rel="stylesheet">
   </head>
 
@@ -159,44 +161,35 @@ closeDBConnection($db, $statement);
                   <h3 class="panel-title">Games Played</h3>
                 </div>
                 <div class="panel-body">
-                  <a href="game_search.php?status=Played"><?php echo $played_count['count'] . '</a> of <a href="game_search.php?status=NotPlayed">' . $number_of_rows . "</a>"; ?>
+                  <a href="game_search.php?status=Played"><?php echo $played_count['count'] . '</a> of <a href="game_search.php?status=NotPlayed">' . $number_of_rows['count'] . "</a>"; ?>
                 </div>
               </div>
             </div>
           </div>
 
-          <h2 class="sub-header">All Games</h2>
-          <div class="table-responsive">
-            <table class="table table-striped sortable">
-              <thead>
-                <tr>
-                  <th data-defaultsort="disabled"></th>
-                  <th class="pointer" nowrap data-mainsort="1" data-firstsort="desc">Game Name&nbsp;<span class="glyphicon glyphicon-sort small" aria-hidden="true"></span></th>
-                  <th data-defaultsort='disabled'></th>
-                  <th class="pointer" nowrap data-dateformat="YYYY-MM-DD">Purchase Date&nbsp;<span class="glyphicon glyphicon-sort small" aria-hidden="true"></span></th>
-                  <th data-defaultsort="disabled"></th>
-                  <th class="pointer" nowrap>Store&nbsp;<span class="glyphicon glyphicon-sort small" aria-hidden="true"></span></th>
-                  <th data-defaultsort="disabled"></th>
-                  <th class="pointer" nowrap>Redeemed&nbsp;<span class="glyphicon glyphicon-sort small" aria-hidden="true"></span></th>
-                  <th data-defaultsort="disabled"></th>
-                  <th class="pointer" nowrap>Played&nbsp;<span class="glyphicon glyphicon-sort small" aria-hidden="true"></span></th>
-                </tr>
-              </thead>
-              <tbody>
-              <?php
-                foreach($game_list_rs as $games) {
-                  echo "<tr>";
-                    echo buildTableContentRow($games['game_name'], $games['id']);
-                    echo buildTableContentRow($games['purchase_date']);
-                    echo buildTableContentRow($games['store']);
-                    echo buildTableContentRow($games['redeemed']);
-                    echo buildTableContentRow($games['played'] ? 'Yes' : 'No');
-                  echo "</tr>";
-                }
-              ?>
-              </tbody>
-            </table>
+          <h2 class="sub-header">Recently Added Games</h2>
+          <div class="row">
+            <?php
+            foreach($game_list_rs as $games) {
+            ?>
+            <div class="col-md-4 cards">
+                <div class="thumbnail">
+                    <img class="img-responsive center-block" src="<?php echo $games['file_path']; ?>" />
+                    <div class="caption">
+                      <h4 class="cardTitle"><?php echo $games['game_name']; ?></h4>
+
+                      <p class="cardGenre">Genre: <?php echo $games['popular_tags']; ?></p>
+                      <p>Redeemed: <?php echo $games['redeemed'];  ?></p>
+                      <p>Played: <?php echo $games['played'] ? 'Yes' : 'No'; ?></p>
+
+                      <a href="game_edit.php?id=<?php echo $games['id']; ?>" title="Edit Game" class="btn btn-default btn-xs pull-right" role="button"><i class="glyphicon glyphicon-edit"></i></a>
+                      <a href="game_details.php?id=<?php echo $games['id']; ?>" class="btn btn-default btn-xs" role="button">More Info</a>
+                    </div>
+                </div>
+            </div>
+            <?php } ?>
           </div>
+          <div class="pull-right"><a class="btn btn-primary" href="game_search.php">View All Games</a></button>
         </div>
       </div>
     </div>
@@ -204,6 +197,21 @@ closeDBConnection($db, $statement);
     <script src="/games/js/bootstrap.min.js"></script>
     <script src="/games/js/moment.min.js"></script>
     <script src="/games/js/bootstrap-sortable.js"></script>
+    <script src="/games/js/jQuery.succinct.min.js"></script>
     <script src="/games/js/games_functions.js"></script>
+    <script>
+      $( document ).ready(function() {
+        $(function(){
+            $('.cardTitle').succinct({
+                size: 33
+            });
+        });
+        $(function(){
+            $('.cardGenre').succinct({
+                size: 40
+            });
+        });
+      });
+    </script>
   </body>
 </html>
