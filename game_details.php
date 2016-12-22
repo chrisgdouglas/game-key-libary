@@ -164,7 +164,7 @@ if ($id !== null || $game_name !== null) {
             echo buildTableContent('Redeemed: ', $game_detail_rs['redeemed']);
             echo buildTableContent('Played: ', ($game_detail_rs['played'] ? 'Yes' : 'No'));
             echo buildTableContent('Distribution Platform: ', $game_detail_rs['distribution_platform']);
-            echo buildTableContent('Notes: ', $game_detail_rs['notes']);
+            echo buildTableContent('Notes: ', nl2br($game_details_rs['notes']));
             }
             else {
               echo "<caption>No game data found.</caption>";
@@ -185,7 +185,7 @@ if ($id !== null || $game_name !== null) {
         <div class="col-xs-11">
           <div class="btn-group btn-group pull-right" role="group">
             <a class="btn btn-default" href="/games/" role="button">Back</a>
-            <a class="btn btn-primary" href="game_edit.php?id=<?php echo $id ?>">Edit Game</a></button>
+            <a class="btn btn-primary" href="game_edit.php?id=<?php echo $id ?>">Edit Game</a>
           </div>
         </div>
       </div>
