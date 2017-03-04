@@ -1,9 +1,9 @@
 <?php
 require_once '/var/www/games/include/simple_html_dom.php';
 $games_path = getcwd();
-$db_username=  "username"; // update with your DB's username
-$db_password=  "yourpassword%357"; // update with your DB's password
-$dsn= "mysql:dbname=games;host=localhost"; // dbname assumed to games; update as required.
+$db_username=  "games";
+$db_password=  "cycle%357";
+$dsn= "mysql:dbname=games;host=localhost";
 
 $db = getDBConnect($dsn,$db_username,$db_password);
 
@@ -11,22 +11,25 @@ $html = new simple_html_dom();
 $ageFlag = FALSE; // if Steam's age check is in place, the expected page data will not be there, error out.
 $tag_limit = 4; // limits the number of genre tags stored.
 
-if (strpos($_POST['steam_store_url'], 'steam') !== FALSE) {
-	$html->load_file($_POST['steam_store_url']);
+if (strpos($_REQUEST['steam_store_url'], 'store.steampowered.com') !== FALSE) {
+	$html->load_file($_REQUEST['steam_store_url']);
 	foreach($html->find('h2') as $element) {
 	  if ($element->plaintext == "Please enter your birth date to continue:") {
 	  	$ageFlag = TRUE;
+			$return_values = array(
+				"display_message" => "errorGetWebData-agegate"
+			);
 	  	break;
 	  }
 	}
 }
 else { // something wrong with the URL; don't continue and return error.
 	$return_values = array(
-		"display_message" => "errorGetWebData"
+		"display_message" => "errorGetWebData-url"
 	);
 }
 
-if (!isset($return_values) && !empty($html) && !$ageFlag) { // everything looks good, start getting data.
+if (!isset($return_values) && isset($html) && !$ageFlag) { // everything looks good, start getting data.
 
 // get popular genre tags, cut array down to the amount set in $tag_limit
 	foreach($html->find('a[class=app_tag]') as $tag) {
@@ -46,7 +49,7 @@ if (!isset($return_values) && !empty($html) && !$ageFlag) { // everything looks 
 		$destination = $games_path . "/images/" . $file_name;
 		if (!copy($image_server_src, $destination)) {
 			$return_values = array(
-				"display_message" => "errorGetWebData"
+				"display_message" => "errorGetWebData-getimage"
 			);
 		}
 		else {
@@ -64,7 +67,7 @@ if (!isset($return_values) && !empty($html) && !$ageFlag) { // everything looks 
 		$statement->execute();
 	} catch (PDOException $e) {
 			$return_values = array(
-				"display_message" => "errorGetWebData"
+				"display_message" => "errorGetWebData-dbimage"
 			);
 	}
 
@@ -86,9 +89,11 @@ if (!isset($return_values) && !empty($html) && !$ageFlag) { // everything looks 
 }
 //Something has gone horribly wrong.
 else {
-	$return_values = array(
-		"display_message" => "errorGetWebData"
-	);
+	if (!isset($return_values)) { // no other errors have accrued.
+		$return_values = array(
+			"display_message" => "errorGetWebData-dom"
+		);
+	}
 }
 echo json_encode($return_values);
 
