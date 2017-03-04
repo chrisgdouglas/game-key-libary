@@ -89,3 +89,40 @@ body {
 .pointer {
   cursor: pointer;
 }
+
+
+.label_link {
+  color: white;
+  text-decoration: none;
+}
+.label_link:link  {
+  color: white;
+  text-decoration: none;
+}
+.label_link:hover  {
+  color: white;
+  text-decoration: none;
+}
+.label_link:visited {
+  color: white;
+  text-decoration: none;
+}
+.label_link:active {
+  color: white;
+  text-decoration: none;
+}
+.thumbnail {
+  padding:  0px;
+}
+.cards {
+  overflow: hidden;
+  height:  350px;
+  max-height: 350px;
+  min-height: 350px;
+}
+textarea {
+  white-space: pre-line;
+}
+td {
+  white-space: pre-line;
+}
