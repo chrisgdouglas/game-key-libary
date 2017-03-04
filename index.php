@@ -41,7 +41,6 @@ closeDBConnection($db, $statement);
 
     <!-- Custom styles for this template -->
     <link href="/games/css/dashboard.css" rel="stylesheet">
-    <link href="/games/css/dashboard.css" rel="stylesheet">
   </head>
 
   <body>

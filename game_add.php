@@ -98,7 +98,8 @@ $db = null;
               Data scraped from Steam Store.
             </div>
           </div>
-          <div class="panel panel-danger hidden" id="errorGetWebData">
+          <!-- AJAX ERRORS START -->
+          <div class="panel panel-danger hidden" id="errorGetWebData-url">
             <div class="panel-heading">
               <h3 class="panel-title">
                 Error!
@@ -106,9 +107,54 @@ $db = null;
               </h3>
             </div>
             <div class="panel-body">
-              Failed to scrape data from Steam Store. Invalid URL or Steam Age Check in place.
+              Failed to scrape data from Steam Store. Invalid URL.
             </div>
           </div>
+          <div class="panel panel-danger hidden" id="errorGetWebData-agegate">
+            <div class="panel-heading">
+              <h3 class="panel-title">
+                Error!
+                <span class="glyphicon glyphicon-remove-circle pull-right" aria-hidden="true"></span>
+              </h3>
+            </div>
+            <div class="panel-body">
+              Failed to scrape data from Steam Store. Steam Age Check in place.
+            </div>
+          </div>
+          <div class="panel panel-danger hidden" id="errorGetWebData-dom">
+            <div class="panel-heading">
+              <h3 class="panel-title">
+                Error!
+                <span class="glyphicon glyphicon-remove-circle pull-right" aria-hidden="true"></span>
+              </h3>
+            </div>
+            <div class="panel-body">
+              Failed to scrape data from Steam Store. Invalid Page Data.
+            </div>
+          </div>
+          <div class="panel panel-danger hidden" id="errorGetWebData-getimage">
+            <div class="panel-heading">
+              <h3 class="panel-title">
+                Error!
+                <span class="glyphicon glyphicon-remove-circle pull-right" aria-hidden="true"></span>
+              </h3>
+            </div>
+            <div class="panel-body">
+              Failed to scrape data from Steam Store. Unable to retrieve header image.
+            </div>
+          </div>
+          <div class="panel panel-danger hidden" id="errorGetWebData-dbimage">
+            <div class="panel-heading">
+              <h3 class="panel-title">
+                Error!
+                <span class="glyphicon glyphicon-remove-circle pull-right" aria-hidden="true"></span>
+              </h3>
+            </div>
+            <div class="panel-body">
+              Failed to scrape data from Steam Store. Database Error saving Header Image.
+            </div>
+          </div>
+          <!-- AJAX ERRORS END -->
           <div class="panel panel-danger hidden" id="errorFormSubmission">
             <div class="panel-heading">
               <h3 class="panel-title">
@@ -251,7 +297,7 @@ $db = null;
               </div>
               <div class="tab-pane fade in" role="tabpanel" id="scrape" aria-labelledby="scrape-tab">
                 <br />
-                <form name="scrape_web" id="scrape_web_id" method="post">
+                <form name="scrape_web" id="scrape_web_id">
                   <div class="form-group">
                     <label for="storeid">Steam Store URL for Game</label>
                     <input type="text" class="form-control" id="steamstoreurlid" name="steam_store_url" placeholder="URL" />
@@ -342,6 +388,8 @@ $db = null;
         // Serialize the data in the form
         var serializedData = $form.serialize();
 
+        console.log(serializedData);
+
         // Let's disable the inputs for the duration of the Ajax request.
         // Note: we disable elements AFTER the form data has been serialized.
         // Disabled form elements will not be serialized.
@@ -357,6 +405,7 @@ $db = null;
         // Callback handler that will be called on success
         request.done(function (response){
             var results = JSON.parse(response);
+            console.log(response);
             $("#populartags").val(results["popular_tags"]);
             $("#gamename").val(results["game_name"]);
             $("#imageid").append($('<option>', {value:results["description"], selected:true, text:results["description"]}));

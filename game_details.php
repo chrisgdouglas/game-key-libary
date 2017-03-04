@@ -164,7 +164,7 @@ if ($id !== null || $game_name !== null) {
             echo buildTableContent('Redeemed: ', $game_detail_rs['redeemed']);
             echo buildTableContent('Played: ', ($game_detail_rs['played'] ? 'Yes' : 'No'));
             echo buildTableContent('Distribution Platform: ', $game_detail_rs['distribution_platform']);
-            echo buildTableContent('Notes: ', nl2br($game_details_rs['notes']));
+            echo buildTableContent('Notes: ', $game_detail_rs['notes']);
             }
             else {
               echo "<caption>No game data found.</caption>";
