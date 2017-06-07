@@ -243,9 +243,11 @@ if ($id !== null || $game_name !== null) {
               data: serializedData
           });
 
-          request.done(function (response){
+          request.done(function (response) {
               var result = JSON.parse(response);
               $("#game_key span").html(result);$("#game_key span").html(result);
+              result = null;
+              response = null;
               $("#game_key span").attr('title', 'Click to hide Game Key.');
           });
         }

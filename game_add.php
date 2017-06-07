@@ -241,7 +241,7 @@ $db = null;
                   <div class="form-group">
                   <div class="form-group">
                     <label for="gamekey">Game Key</label>
-                    <input type="text" class="form-control" id="gamekey" name="game_key" placeholder="Game Key" />
+                    <input type="<?php echo ($_SESSION['game_key_privacy'] === 0) ? 'text' : 'password'; ?>" class="form-control" id="gamekey" name="game_key" placeholder="Game Key" />
                   </div>
                     <label for="purchasedate">Purchase Date</label>
                     <div class="input-group flatpickr">
