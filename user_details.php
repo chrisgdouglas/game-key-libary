@@ -196,6 +196,19 @@ closeDBConnection($db, $statement);
                     <label for="pwd2id">Verify Password</label>
                     <input type="text" class="form-control" id="pwd2id" name="password_verify" />
                   </div>
+                  <div class="form-group" title="If checked, the game key will be obscured when displayed.">
+                    <input type="checkbox" name="game_key_privacy" id="gkp"
+                    <?php
+                      if ($_SESSION['game_key_privacy'] === 1) {
+                        echo 'checked value="true"';
+                      }
+                      else {
+                        echo 'value="false"';
+                      }
+                     ?>
+                    >
+                    <label for="gkp">Game Key Privacy</label>&nbsp;<span class="glyphicon glyphicon-question-sign" aria-hidden=true></span>
+                  </div>
                   <?php
                     if ($isAdmin) {
                     echo '<div class=form-group">

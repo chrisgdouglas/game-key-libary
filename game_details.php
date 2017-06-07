@@ -159,7 +159,7 @@ if ($id !== null || $game_name !== null) {
             echo buildTableContent('Genre Tags: ', $game_detail_rs['popular_tags']);
             echo buildTableContent('Purchase Date: ', $game_detail_rs['purchase_date']);
             echo buildTableContent('Store: ', $game_detail_rs['store']);
-            echo buildTableContent('Game Key: ', $game_detail_rs['game_key']);
+            echo buildTableContent('Game Key: ', ($_SESSION['game_key_privacy'] === 0 ? $game_detail_rs['game_key'] : "*****-*****-*****"), "game_key");
             echo buildTableContent('Cost: ', ($game_detail_rs['cost'] == 0 ? 'Free' : $game_detail_rs['currency_symbol'] . $game_detail_rs['cost']));
             echo buildTableContent('Redeemed: ', $game_detail_rs['redeemed']);
             echo buildTableContent('Played: ', ($game_detail_rs['played'] ? 'Yes' : 'No'));
@@ -206,7 +206,7 @@ if ($id !== null || $game_name !== null) {
 
       //add links to search page with genre input within the "Genre Tags" field
       var rawData = "<?php echo $game_detail_rs['popular_tags'] ?>";
-      var genreTags = rawData.split(",");
+      var genreTags = rawData.split(", ");
       var genreHTML = new Array();
       for (i=0; genreTags.length>i; i++) {
         if (i!==0) {
@@ -214,9 +214,42 @@ if ($id !== null || $game_name !== null) {
         } else {
           space = "";
         }
-        genreHTML[i] = space + "<a href='game_search.php?genre=" + genreTags[i].trim() + "'>" + genreTags[i].trim() + "</a>";
+        genreHREF = escape(genreTags[i])
+        genreHTML[i] = space + "<a href='game_search.php?genre=" + genreHREF.trim() + "'>" + genreTags[i].trim() + "</a>";
       }
       $("body > div > div:nth-child(2) > div > table > tbody > tr:nth-child(2) > td:nth-child(2)").html(genreHTML.join());
+
+      var key_val = $("#game_key").html();
+      if (key_val === "*****-*****-*****") {
+        $("#game_key").html("");
+        var newHTML = '<span title="Click to reveal Game Key.">' + key_val + '</span>';
+        $("#game_key").append(newHTML);
+        $("#game_key span").addClass('game_key_link');
+      }
+
+      $("#game_key").bind('click', function() {
+        var key_val = $("#game_key span").html();
+        if (key_val !== "*****-*****-*****") {
+          var newHTML = "*****-*****-*****";
+          $("#game_key span").html(newHTML);
+          $("#game_key span").attr('title', 'Click to reveal Game Key.');
+        }
+        else {
+          var serializedData = "id=<?php echo $game_detail_rs['id'] ?>";
+
+          request = $.ajax({
+              url: "/games/ajax_gane_get_key.php",
+              type: "post",
+              data: serializedData
+          });
+
+          request.done(function (response){
+              var result = JSON.parse(response);
+              $("#game_key span").html(result);$("#game_key span").html(result);
+              $("#game_key span").attr('title', 'Click to hide Game Key.');
+          });
+        }
+      });
     </script>
   </body>
 </html>
