@@ -111,6 +111,15 @@ body {
   color: white;
   text-decoration: none;
 }
+.game_key_link {
+  color: #337ab7;
+  cursor: pointer;
+}
+.game_key_link:hover {
+  color: #23527c;
+  cursor: pointer;
+  text-decoration: underline;
+}
 .thumbnail {
   padding:  0px;
 }

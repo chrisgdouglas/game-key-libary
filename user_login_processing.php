@@ -5,7 +5,7 @@ require_once getcwd() . '/include/functions.php';
 $db = getDBConnect(DSN, DB_USERNAME, DB_PASSWORD);
 array_walk($_POST,'wsafe');
 
-$sql = "SELECT id, password FROM users WHERE email= :email";
+$sql = "SELECT id, password, game_key_privacy FROM users WHERE email= :email";
 $statement = $db->prepare($sql);
 $statement->bindParam(':email', $_POST['email_address'], PDO::PARAM_STR, 512);
 $statement->execute();
@@ -16,6 +16,7 @@ if ($user_data_rs) {
 		session_start();
 		$_SESSION['logged_id'] = "1";
 		$_SESSION['user_id'] = $user_data_rs['id'];
+		$_SESSION['game_key_privacy'] = (int)$user_data_rs['game_key_privacy'];
 		$return_value = "success";
 	} else {
 		$return_value = "error";
