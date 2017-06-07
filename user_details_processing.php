@@ -49,7 +49,15 @@ if ($_POST['formAction'] == "editUser") {
 	if (array_key_exists('user_role', $_POST) && strlen($_POST['user_role']) > 0) {
 		$has_role = TRUE;
 	}
-	$sql = "UPDATE users SET display_name = :new_display_name, email = :new_email";
+	if (array_key_exists('game_key_privacy', $_POST)) {
+		$game_key_privacy = 1;
+		$_SESSION['game_key_privacy'] = 1;
+	}
+	else {
+		$game_key_privacy = 0;
+		$_SESSION['game_key_privacy'] = 0;
+	}
+	$sql = "UPDATE users SET display_name = :new_display_name, email = :new_email, game_key_privacy = :game_key_privacy";
   if ($has_password) {
   	$sql = $sql . ", password = :hashed_password";
   }
@@ -62,6 +70,7 @@ if ($_POST['formAction'] == "editUser") {
 		$statement = $db->prepare($sql);
 		$statement->bindParam(':new_display_name', $_POST['new_display_name'], PDO::PARAM_STR, 255);
 		$statement->bindParam(':new_email', $_POST['new_email'], PDO::PARAM_STR, 512);
+		$statement->bindParam(':game_key_privacy', $game_key_privacy, PDO::PARAM_BOOL , 1);
 		if ($has_password) {
 			$statement->bindParam(':hashed_password', password_hash($_POST['password'], PASSWORD_DEFAULT), PDO::PARAM_STR, 255);
 		}
