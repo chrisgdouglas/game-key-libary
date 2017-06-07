@@ -238,7 +238,7 @@ if ($id !== null || $game_name !== null) {
           var serializedData = "id=<?php echo $game_detail_rs['id'] ?>";
 
           request = $.ajax({
-              url: "/games/ajax_gane_get_key.php",
+              url: "/games/ajax_game_get_key.php",
               type: "post",
               data: serializedData
           });
