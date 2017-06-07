@@ -157,6 +157,7 @@ CREATE TABLE `store_lkup` (
 --
 
 INSERT INTO `store_lkup` (`store_name`, `store_url`) VALUES
+('Bundle Stars', 'https://www.bundlestars.com/'),
 ('Desura', 'N/A'),
 ('Gamer\'s Gate', 'http://www.gamersgate.com/'),
 ('Good Old Games', 'https://www.gog.com'),
@@ -183,7 +184,8 @@ CREATE TABLE `users` (
   `email` varchar(512) NOT NULL,
   `password` varchar(512) NOT NULL,
   `display_name` varchar(255) NOT NULL,
-  `user_role` int(11) NOT NULL DEFAULT '0' COMMENT '0 - disabled, 1 - active, 2 - admin'
+  `user_role` int(11) NOT NULL DEFAULT '0' COMMENT '0 - disabled, 1 - active, 2 - admin',
+  `game_key_privacy` tinyint(1) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
