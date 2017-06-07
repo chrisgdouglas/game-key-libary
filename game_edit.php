@@ -172,14 +172,7 @@ closeDBConnection($db, $statement);
             </div>
             <div class="form-group">
               <label for="gamekey">Game Key</label>
-              <?php
-              if ($_SESSION['game_key_privacy'] === 0) {
-                echo '<input type="text" class="form-control" id="gamekey" name="game_key" placeholder="Game Key" value="' . $game_detail_rs['game_key'] .'">';
-              }
-              else {
-                echo '<input type="password" class="form-control" id="gamekey" name="game_key" placeholder="Game Key" value="' . $game_detail_rs['game_key'] .'">';
-              }
-              ?>
+              <input type="<?php echo ($_SESSION['game_key_privacy'] === 0) ? 'text' : 'password'; ?>" class="form-control" id="gamekey" name="game_key" placeholder="Game Key" value="<?php echo $game_detail_rs['game_key'] ?>">
             </div>
             <div class="form-group">
               <label for="purchasedate">Purchase Date</label>
