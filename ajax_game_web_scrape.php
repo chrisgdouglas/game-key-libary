@@ -2,7 +2,7 @@
 require_once '/var/www/games/include/simple_html_dom.php';
 $games_path = getcwd();
 $db_username=  "username"; // update with your DB's username
-$db_password=  "yourpassword%357"; // update with your DB's password
+$db_password=  "yourpassword"; // update with your DB's password
 $dsn= "mysql:dbname=games;host=localhost";
 
 $db = getDBConnect($dsn,$db_username,$db_password);
@@ -40,7 +40,7 @@ if (!isset($return_values) && isset($html) && !$ageFlag) { // everything looks g
 	}
 	$popular_tags = array_splice($popular_tags, 0, $tag_limit);
 	$game_name_raw = $html->find('div.apphub_AppName',-1)->plaintext;
-	$game_name = str_replace("â€™", "'", $game_name_raw); // replace &raquo; with standard apostrophe for url escaping
+	$game_name = str_replace("’", "'", $game_name_raw); // replace &raquo; with standard apostrophe for url escaping
 	$image_description = $game_name . " Header";
 	$image_server_src = $html->find('img.game_header_image_full',0)->src;
 	$store_id = $html->find('div[data-appid]', -1)->attr['data-appid'];
