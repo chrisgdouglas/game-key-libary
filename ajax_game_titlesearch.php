@@ -10,5 +10,6 @@ $statement = $db->prepare($sql);
 $statement->bindParam(':game_name', $_POST['game_name'], PDO::PARAM_STR, 255);
 $statement->execute();
 $return_rs = $statement->fetchAll();
+closeDBConnection($db, $statement);
 
 echo json_encode($return_rs);
