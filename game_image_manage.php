@@ -3,11 +3,12 @@
 require_once getcwd() . '/games.config.php';
 
 $db = getDBConnect(DSN, DB_USERNAME, DB_PASSWORD);
+
 $isAdmin = getCurrentUser($db, $_SESSION['user_id'], TRUE);
 
-$sql = "SELECT * FROM images ORDER BY description ASC";
+$sql = "SELECT description, file_path FROM images ORDER BY description ASC";
 $images_rs = dbGetRows($db, $sql);
-$db = null;
+closeDBConnection($db);
 
 require_once getcwd() . '/include/global_nav_inc.html';
 
@@ -21,6 +22,17 @@ require_once getcwd() . '/include/global_nav_inc.html';
       </div>
       <div class="row">
         <div class="col-xs-12">
+          <div class="panel panel-danger hidden" id="errorFormSubmission">
+            <div class="panel-heading">
+              <h3 class="panel-title">
+                Error!
+                <span class="glyphicon glyphicon-remove-circle pull-right" aria-hidden="true"></span>
+              </h3>
+            </div>
+            <div class="panel-body">
+              Errors in form submission. Please verify the fields highlighted in red below.
+            </div>
+          </div>
           <div data-id="togglable-tabs">
             <ul class="nav nav-tabs" id="myTabs" role="tablist">
               <li role="presentation" class="active">
@@ -41,7 +53,7 @@ require_once getcwd() . '/include/global_nav_inc.html';
             <div class="tab-content" id="myTabContent">
               <div class="tab-pane fade in active" role="tabpanel" id="add" aria-labelledby="add-tab">
                 <br />
-                <form name="addImage" action="game_image_manage_processing.php" method="POST" enctype="multipart/form-data">
+                <form name="addImage" action="game_image_manage_processing.php" method="POST" enctype="multipart/form-data" onsubmit="return validateAddForm(this)">
                   <input type="hidden" name="addSelected" id="addformid" value="1" />
                   <div class="form-group">
                     <label for="add_image_description">Image Description</label>
@@ -66,7 +78,7 @@ require_once getcwd() . '/include/global_nav_inc.html';
               </div>
               <div class="tab-pane fade" role="tabpanel" id="edit" aria-labelledby="edit-tab">
                 <br />
-                <form name="existingImages" action="game_image_manage_processing.php" method="POST">
+                <form name="existingImages" action="game_image_manage_processing.php" method="POST" onsubmit="return validateEditForm(this)">
                   <input type="hidden" name="editSelected" id="editformid" value="0" />
                   <input type="hidden" name="edittedImage" id="edittedImageid" value="" />
                   <input type="hidden" name="edittedImagePathid" id="edittedImagePathid" value="" />
@@ -74,7 +86,7 @@ require_once getcwd() . '/include/global_nav_inc.html';
                    <label for="imageid">Select Existing Image</label>
                    <select name="image" id="imageid" class="form-control" onChange="updateForm('imageid');">
                    <?php
-                      echo buildSelectOption("", "&nbsp;");
+                     echo buildSelectOption("", "&nbsp;");
                      foreach($images_rs as $image) {
                        echo buildSelectOption($image['description'], $image['file_path']);
                      }
@@ -108,7 +120,7 @@ require_once getcwd() . '/include/global_nav_inc.html';
                    <label for="imageid">Select Existing Image to Delete</label>
                    <select name="deleteimage" id="deleteimageid" class="form-control">
                    <?php
-                      echo buildSelectOption("", "&nbsp;");
+                     echo buildSelectOption("", "&nbsp;");
                      foreach($images_rs as $image) {
                        echo buildSelectOption($image['description'], $image['file_path']);
                      }
@@ -134,6 +146,43 @@ require_once getcwd() . '/include/global_nav_inc.html';
     <script src="/games/js/bootstrap.min.js"></script>
     <script src="/games/js/games_functions.js"></script>
     <script>
+      function validateAddForm(subForm) {
+        clearValidationErrors();
+        var violations = new Array();
+        if (subForm.add_description.value.length <= 1) {
+          violations.push(subForm.add_description.id);
+        }
+        if (subForm.add_file_by_url.value.length <= 1 && subForm.add_file_by_upload.value.length <= 1) {
+          violations.push(subForm.add_file_by_url.id);
+          violations.push(subForm.add_file_by_upload.id);
+        }
+        if (violations.length > 0) {
+          showValidationErrors(violations);
+          return false;
+        }
+        else {
+          return true;
+        }
+      }
+
+      function validateEditForm(subForm) {
+        clearValidationErrors();
+        var violations = new Array();
+        if (subForm.edit_description.value.length <= 1) {
+          violations.push(subForm.edit_description.id);
+        }
+        if (subForm.edit_file_path.value.length <= 1) {
+          violations.push(subForm.edit_file_path.id);
+        }
+        if (violations.length > 0) {
+          showValidationErrors(violations);
+          return false;
+        }
+        else {
+          return true;
+        }
+      }
+
       function updateForm(selObjID) {
         var selObj = document.getElementById(selObjID);
         document.getElementById('image_description').value = selObj.options[document.getElementById(selObjID).selectedIndex].text;
@@ -141,10 +190,14 @@ require_once getcwd() . '/include/global_nav_inc.html';
         document.getElementById('image_path').value = selObj.value;
         document.getElementById('edittedImagePathid').value = selObj.value;
       }
+
       $('#myTabs a').click(function (e) {
         e.preventDefault();
         $(this).tab('show');
         var selectedTab = this.id;
+        <?php
+        if ($isAdmin) {
+        ?>
         if (selectedTab === "delete-tab") {
           document.getElementById("editformid").value = "0";
           document.getElementById("addformid").value = "0";
@@ -153,6 +206,7 @@ require_once getcwd() . '/include/global_nav_inc.html';
           }
           return;
         }
+        <?php } ?>
         if (selectedTab === "add-tab") {
           document.getElementById("editformid").value = "0";
           document.getElementById("addformid").value = "1";
