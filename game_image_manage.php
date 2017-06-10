@@ -144,26 +144,30 @@ require_once getcwd() . '/include/global_nav_inc.html';
       $('#myTabs a').click(function (e) {
         e.preventDefault();
         $(this).tab('show');
-        if (document.getElementById("editformid").value == 0) {
-          document.getElementById("editformid").value = 1;
-          document.getElementById("addformid").value = 0;
+        var selectedTab = this.id;
+        if (selectedTab === "delete-tab") {
+          document.getElementById("editformid").value = "0";
+          document.getElementById("addformid").value = "0";
           if (document.getElementById("deleteformid") !== null) {
-            document.getElementById("deleteformid").value = 0;
+            document.getElementById("deleteformid").value = "1";
           }
+          return;
         }
-        if (document.getElementById("addformid").value == 0) {
-          document.getElementById("editformid").value = 0;
-          document.getElementById("addformid").value = 1;
+        if (selectedTab === "add-tab") {
+          document.getElementById("editformid").value = "0";
+          document.getElementById("addformid").value = "1";
           if (document.getElementById("deleteformid") !== null) {
-            document.getElementById("deleteformid").value = 0;
+            document.getElementById("deleteformid").value = "0";
           }
+          return;
         }
-        if (document.getElementById("deleteformid") !== null && document.getElementById("deleteformid").value == 0) {
-          document.getElementById("editformid").value = 0;
-          document.getElementById("addformid").value = 0;
+        if (selectedTab === "edit-tab") {
+          document.getElementById("editformid").value = "1";
+          document.getElementById("addformid").value = "0";
           if (document.getElementById("deleteformid") !== null) {
-            document.getElementById("deleteformid").value = 1;
+            document.getElementById("deleteformid").value = "0";
           }
+          return;
         }
       });
     </script>

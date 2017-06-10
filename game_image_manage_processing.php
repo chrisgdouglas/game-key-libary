@@ -71,14 +71,19 @@ if ($_POST['editSelected'] == 1) {
 }
 
 if ($_POST['deleteSelected'] == 1) {
-	$system_file_name = HTDOC_PATH . $_POST['deleteimage'];
-	unlink($system_file_name);
-	$sql = "DELETE FROM images WHERE file_path = :file_path_to_delete";
-	try {
-		$statement = $db->prepare($sql);
-		$statement->bindParam(':file_path_to_delete', $_POST['deleteimage'], PDO::PARAM_STR, 728);
-		$statement->execute();
-	} catch (PDOException $e) {
+	$isAdmin = getCurrentUser($db, $_SESSION['user_id'], TRUE);
+		if ($isAdmin) {
+		$system_file_name = HTDOC_PATH . $_POST['deleteimage'];
+		unlink($system_file_name);
+		$sql = "DELETE FROM images WHERE file_path = :file_path_to_delete";
+		try {
+			$statement = $db->prepare($sql);
+			$statement->bindParam(':file_path_to_delete', $_POST['deleteimage'], PDO::PARAM_STR, 728);
+			$statement->execute();
+		} catch (PDOException $e) {
+			$action_message = "actionMsg=errorImage";
+		}
+	} else {
 		$action_message = "actionMsg=errorImage";
 	}
 }
