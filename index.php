@@ -57,7 +57,7 @@ require_once getcwd() . '/include/global_nav_inc.html';
                   </h3>
                 </div>
                 <div class="panel-body">
-                  Something went wrong while during the the image operation.
+                  Something went wrong during the the image operation.
                 </div>
               </div>
               <div class="panel panel-success hidden" id="successDeleteGame">
