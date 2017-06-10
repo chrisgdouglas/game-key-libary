@@ -39,7 +39,8 @@ if (!isset($return_values) && isset($html) && !$ageFlag) { // everything looks g
 		$popular_tags[] = $item;
 	}
 	$popular_tags = array_splice($popular_tags, 0, $tag_limit);
-	$game_name = $html->find('div.apphub_AppName',-1)->plaintext;
+	$game_name_raw = $html->find('div.apphub_AppName',-1)->plaintext;
+	$game_name = str_replace("’", "'", $game_name_raw); // replace &raquo; with standard apostrophe for url escaping
 	$image_description = $game_name . " Header";
 	$image_server_src = $html->find('img.game_header_image_full',0)->src;
 	$store_id = $html->find('div[data-appid]', -1)->attr['data-appid'];
@@ -95,7 +96,9 @@ else {
 		);
 	}
 }
+
 echo json_encode($return_values);
+
 
 
 // added below as the functions include was causing namespace issues with the simple_html_dom.php code.

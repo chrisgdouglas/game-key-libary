@@ -24,86 +24,32 @@ if ($id !== null || $game_name !== null) {
     $statement->bindParam(':game_name', $game_name, PDO::PARAM_STR, 255);
   }
   $statement->execute();
-  // var_dump($statement->errorInfo());
-  // var_dump($sql);
   $game_detail_rs = $statement->fetch();
 
   $id = is_null($id) ? $game_detail_rs['id'] : $id;
 
-  $sql = "SELECT external_url FROM external_urls WHERE external_site = 'Steam'";
-  $statement = $db->prepare($sql);
-  $statement->execute();
-  $steam_link_rs = $statement->fetch();
-  $steamLink = $steam_link_rs['external_url'] . $game_detail_rs['store_id'];
-
-  $sql = "SELECT external_url FROM external_urls WHERE external_site = 'SteamDB'";
-  $statement = $db->prepare($sql);
-  $statement->execute();
-
-  $steamDBLink_rs = $statement->fetch();
-  $steamDBLink = $steamDBLink_rs['external_url'] . $game_detail_rs['store_id'];
-
-  $sql = "SELECT external_url FROM external_urls WHERE external_site = 'Metacritic'";
-  $statement = $db->prepare($sql);
-  $statement->execute();
-
-  $metacriticLink_rs = $statement->fetch();
-  $metacriticLink = str_replace("?", strtolower($game_detail_rs['game_name']), $metacriticLink_rs['external_url']);
+  $sql = "SELECT external_site, external_url FROM external_urls WHERE external_site = 'Steam' OR external_site = 'SteamDB' OR external_site = 'Metacritic'";
+  foreach ($db->query($sql) as $row) {
+  	switch ($row['external_site']) {
+  		case 'Steam':
+  			$steamLink = $row['external_url'] . $game_detail_rs['store_id'];
+  			break;
+  		case 'SteamDB':
+  			$steamDBLink = $row['external_url'] . $game_detail_rs['store_id'];
+  			break;
+  		case 'Metacritic':
+  			$game_name = str_replace("’", "'", $game_detail_rs['game_name']); // replace any games names that contain &raquo with ' for proper html escaping
+  			$metacriticLink = str_replace("?", rawurlencode(strtolower($game_name)), $row['external_url']);
+  			break;
+  	}
+  }
 
   closeDBConnection($db, $statement);
 }
 
+require_once getcwd() . '/include/global_nav_inc.html';
+
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <!-- <link rel="icon" href="../../favicon.ico"> -->
-
-    <title>Games Dashboard</title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="/games/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="/games/css/dashboard.css" rel="stylesheet">
-  </head>
-
-  <body>
-
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="/games/">Game Key Manager</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="user_details.php?id=<?php echo $_SESSION['user_id'] ?>">Profile</a></li>
-            <li><a href="user_logout.php"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span></a></li>
-          </ul>
-          <form class="navbar-form navbar-right" name="searchForm" id="searchFormid" action="/games/game_search.php" method="post">
-            <div class="input-group dropdown">
-              <input type="text" class="form-control" id="searchField" name="search" placeholder="Search..." data-toggle="dropdown" />
-              <span id="searchButton" class="input-group-addon pointer"><i class="glyphicon glyphicon-search"></i></span>
-                <ul class="dropdown-menu hidden dropdown-menu-right col-xs-12" aria-labelledby="searchField" id="dropDownParent">
-                </ul>
-             </div>
-          </form>
-        </div>
-      </div>
-    </nav>
 
     <div class="container-fluid">
       <div class="row">
@@ -155,8 +101,8 @@ if ($id !== null || $game_name !== null) {
           <table class="table table-condensed">
           <?php
             if ($game_detail_rs !== FALSE) {
-            echo buildTableContent('Game Name: ', $game_detail_rs['game_name']);
-            echo buildTableContent('Genre Tags: ', $game_detail_rs['popular_tags']);
+            echo buildTableContent('Game Name: ', $game_detail_rs['game_name'], "game_name");
+            echo buildTableContent('Genre Tags: ', $game_detail_rs['popular_tags'], "popular_tags");
             echo buildTableContent('Purchase Date: ', $game_detail_rs['purchase_date']);
             echo buildTableContent('Store: ', $game_detail_rs['store']);
             echo buildTableContent('Game Key: ', ($_SESSION['game_key_privacy'] === 0 ? $game_detail_rs['game_key'] : "*****-*****-*****"), "game_key");
@@ -201,7 +147,7 @@ if ($id !== null || $game_name !== null) {
 
       if (!steamLink.endsWith("/") && !steamLink.endsWith("/")) {
         var htmlString = "&nbsp;<a class='btn btn-primary btn-xs' target='_blank' href='" + steamLink +"'>View on Steam</a>&nbsp;<a class='btn btn-primary btn-xs' target='_blank' href='" + SteamDBLink +"'>View on SteamDB</a>&nbsp;<a class='btn btn-primary btn-xs' target='_blank' href='" + metacriticLink +"'>Search on Metacritic</a>";
-        $("body > div > div:nth-child(2) > div > table > tbody > tr:nth-child(1) > td:nth-child(2)").append(htmlString);
+        $("#game_name").append(htmlString);
       }
 
       //add links to search page with genre input within the "Genre Tags" field
@@ -217,7 +163,7 @@ if ($id !== null || $game_name !== null) {
         genreHREF = escape(genreTags[i])
         genreHTML[i] = space + "<a href='game_search.php?genre=" + genreHREF.trim() + "'>" + genreTags[i].trim() + "</a>";
       }
-      $("body > div > div:nth-child(2) > div > table > tbody > tr:nth-child(2) > td:nth-child(2)").html(genreHTML.join());
+      $("#popular_tags").html(genreHTML.join());
 
       var key_val = $("#game_key").html();
       if (key_val === "*****-*****-*****") {
@@ -233,8 +179,7 @@ if ($id !== null || $game_name !== null) {
           var newHTML = "*****-*****-*****";
           $("#game_key span").html(newHTML);
           $("#game_key span").attr('title', 'Click to reveal Game Key.');
-        }
-        else {
+        } else {
           var serializedData = "id=<?php echo $game_detail_rs['id'] ?>";
 
           request = $.ajax({
@@ -244,10 +189,7 @@ if ($id !== null || $game_name !== null) {
           });
 
           request.done(function (response) {
-              var result = JSON.parse(response);
-              $("#game_key span").html(result);$("#game_key span").html(result);
-              result = null;
-              response = null;
+              $("#game_key span").html(JSON.parse(response));
               $("#game_key span").attr('title', 'Click to hide Game Key.');
           });
         }
