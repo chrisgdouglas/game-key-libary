@@ -30,7 +30,7 @@ if ($_POST['addSelected'] == 1) {
 				}
 		}
 		else {
-			die('No valid image found.');
+			$action_message = "actionMsg=errorImage";
 		}
 		if (isset($file_path)) {
 			$sql = "INSERT INTO images (description, file_path)
@@ -41,7 +41,7 @@ if ($_POST['addSelected'] == 1) {
 				$statement->bindParam(':file_path', $file_path, PDO::PARAM_STR, 728);
 				$statement->execute();
 			} catch (PDOException $e) {
-				$action_message = "?actionMsg=errorImage";
+				$action_message = "actionMsg=errorImage";
 			}
 		}
 }
@@ -87,9 +87,9 @@ if ($_POST['deleteSelected'] == 1) {
 		$action_message = "actionMsg=errorImage";
 	}
 }
-closeDBConnection($db, $statement);
 if (!isset($action_message)) {
 	$action_message = "actionMsg=succesImage";
+	closeDBConnection($db, $statement);
 }
 $url = "/games/?" . $action_message;
 header("Location: $url");
