@@ -27,6 +27,7 @@ if ($owner_match !== FALSE) {
 	  distribution_platform = :distribution_platform,
 	  store_id = :store_id,
 	  image = :image,
+	  popular_tags = :popular_tags,
 	  notes = :notes
 	WHERE
 	  id = :id";
@@ -45,6 +46,7 @@ if ($owner_match !== FALSE) {
 		$statement->bindParam(':distribution_platform', $_POST['distribution_platform'], PDO::PARAM_STR, 255);
 		$statement->bindParam(':store_id', $_POST['store_id'], PDO::PARAM_STR, 50);
 		$statement->bindParam(':image', $_POST['image'], PDO::PARAM_STR, 255);
+		$statement->bindParam(':popular_tags', $_POST['popular_tags'], PDO::PARAM_STR, 1024);
 		$statement->bindParam(':notes', $_POST['notes'], PDO::PARAM_STR);
 		$statement->bindParam(':id', $_POST['id'], PDO::PARAM_STR);
 		$statement->execute();
