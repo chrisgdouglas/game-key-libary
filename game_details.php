@@ -1,15 +1,27 @@
 <?php
 require_once getcwd() . '/games.config.php';
 if (isset($_GET)) {
-  $id = array_key_exists('id', $_GET) ? $_GET['id'] : null;
-  $game_name = array_key_exists('game_name', $_GET) ? str_replace("%20", " ", $_GET['game_name']) : null;
-  $actionMsg = array_key_exists('actionMsg', $_GET) ? $_GET['actionMsg'] : null;
+  $id = array_key_exists('id', $_GET) ? safe($_GET['id']) : null;
+  $game_name = array_key_exists('game_name', $_GET) ? str_replace("%20", " ", safe($_GET['game_name'])) : null;
+  $actionMsg = array_key_exists('actionMsg', $_GET) ? safe($_GET['actionMsg']) : null;
 }
 else {
   $id = null;
 }
 
-if ($id !== null || $game_name !== null) {
+if ($id !== null && strlen($id) === 0) {
+  $id = null;
+  $no_game = true;
+}
+else if ($game_name !== null && strlen($game_name) === 0) {
+  $game_name = null;
+  $no_game = true;
+}
+else {
+  $no_game = false;
+}
+
+if ($no_game === false) {
   $db = getDBConnect(DSN, DB_USERNAME, DB_PASSWORD);
 
    $sql = "SELECT g.id, g.game_name, g.purchase_date, g.store, g.game_key, g.redeemed, g.cost, g.played, g.distribution_platform, g.notes, g.store_id, g.popular_tags, exchange_rate.currency_symbol, images.file_path FROM games AS g LEFT JOIN images ON g.image = images.description LEFT JOIN exchange_rate ON g.purchase_currency = exchange_rate.currency";
@@ -25,8 +37,12 @@ if ($id !== null || $game_name !== null) {
   }
   $statement->execute();
   $game_detail_rs = $statement->fetch();
-
-  $id = is_null($id) ? $game_detail_rs['id'] : $id;
+  if ($game_detail_rs === false || empty($game_detail_rs)) {
+    $no_game = true;
+  }
+  else {
+    $id = is_null($id) ? $game_detail_rs['id'] : $id;
+  }
 
   $sql = "SELECT external_site, external_url FROM external_urls WHERE external_site = 'Steam' OR external_site = 'SteamDB' OR external_site = 'Metacritic'";
   foreach ($db->query($sql) as $row) {
@@ -100,17 +116,17 @@ require_once getcwd() . '/include/global_nav_inc.html';
           </div>
           <table class="table table-condensed">
           <?php
-            if ($game_detail_rs !== FALSE) {
-            echo buildTableContent('Game Name: ', $game_detail_rs['game_name'], "game_name");
-            echo buildTableContent('Genre Tags: ', $game_detail_rs['popular_tags'], "popular_tags");
-            echo buildTableContent('Purchase Date: ', $game_detail_rs['purchase_date']);
-            echo buildTableContent('Store: ', $game_detail_rs['store']);
-            echo buildTableContent('Game Key: ', ($_SESSION['game_key_privacy'] === 0 ? $game_detail_rs['game_key'] : "*****-*****-*****"), "game_key");
-            echo buildTableContent('Cost: ', ($game_detail_rs['cost'] == 0 ? 'Free' : $game_detail_rs['currency_symbol'] . $game_detail_rs['cost']));
-            echo buildTableContent('Redeemed: ', $game_detail_rs['redeemed']);
-            echo buildTableContent('Played: ', ($game_detail_rs['played'] ? 'Yes' : 'No'));
-            echo buildTableContent('Distribution Platform: ', $game_detail_rs['distribution_platform']);
-            echo buildTableContent('Notes: ', $game_detail_rs['notes']);
+            if ($no_game === false) {
+              echo buildTableContent('Game Name: ', $game_detail_rs['game_name'], "game_name");
+              echo buildTableContent('Genre Tags: ', $game_detail_rs['popular_tags'], "popular_tags");
+              echo buildTableContent('Purchase Date: ', $game_detail_rs['purchase_date']);
+              echo buildTableContent('Store: ', $game_detail_rs['store']);
+              echo buildTableContent('Game Key: ', ($_SESSION['game_key_privacy'] === 0 ? $game_detail_rs['game_key'] : "*****-*****-*****"), "game_key");
+              echo buildTableContent('Cost: ', ($game_detail_rs['cost'] == 0 ? 'Free' : $game_detail_rs['currency_symbol'] . $game_detail_rs['cost']));
+              echo buildTableContent('Redeemed: ', $game_detail_rs['redeemed']);
+              echo buildTableContent('Played: ', ($game_detail_rs['played'] ? 'Yes' : 'No'));
+              echo buildTableContent('Distribution Platform: ', $game_detail_rs['distribution_platform']);
+              echo buildTableContent('Notes: ', $game_detail_rs['notes']);
             }
             else {
               echo "<caption>No game data found.</caption>";
@@ -124,14 +140,20 @@ require_once getcwd() . '/include/global_nav_inc.html';
           <div class="pull-left" role="group">
             <form name="deleteGame" action="/games/game_delete_game_processing.php" method="post" onsubmit="return confirm('Delete game?');">
               <input type="hidden" name="id" value="<?php echo $id ?>" />
-              <button class="btn btn-danger" role="button" type="submit">Delete Game</button>
+              <?php
+              if ($no_game === false) {
+                echo '<button class="btn btn-danger" role="button" type="submit">Delete Game</button>';
+              } ?>
             </form>
           </div>
         </div>
         <div class="col-xs-11">
           <div class="btn-group btn-group pull-right" role="group">
             <a class="btn btn-default" href="/games/" role="button">Back</a>
-            <a class="btn btn-primary" href="game_edit.php?id=<?php echo $id ?>">Edit Game</a>
+            <?php
+            if ($no_game === false) {
+              echo '<a class="btn btn-primary" href="game_edit.php?id=<?php echo $id ?>">Edit Game</a>';
+            } ?>
           </div>
         </div>
       </div>

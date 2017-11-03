@@ -63,7 +63,10 @@ function getCurrentUser($dbh, $sessions_id, $admin_flag=null) {
   $statement->execute();
   $current_user_rs = $statement->fetch();
   $statement->closeCursor();
-  if ($admin_flag !== null) {
+  if ($current_user_rs === false || empty($current_user_rs)) {
+    return false;
+  }
+  else if ($admin_flag !== null) {
     return $current_user_rs['user_role'] == 2 ? TRUE : FALSE;
   }
   else {
@@ -93,6 +96,7 @@ function safe($value) {
     $value = trim(htmlentities(strip_tags($value)));
     if(get_magic_quotes_gpc()) $value = stripslashes($value);
   }
+  return $value;
 }
 
 class UUID {
