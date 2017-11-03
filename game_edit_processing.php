@@ -51,15 +51,15 @@ if ($owner_match !== FALSE) {
 		$statement->bindParam(':id', $_POST['id'], PDO::PARAM_STR);
 		$statement->execute();
 	} catch (PDOException $e) {
-		$action_message = "actionMsg=errorDisplay";
+		$action_message = "errorDisplay";
 	}
 	closeDBConnection($db, $statement);
 	if (!isset($action_message)) {
-			$action_message = "actionMsg=succesEdit";
+			$action_message = "succesEdit";
 	}
 }
 else {
 	$action_message = "actionMsg=errorDisplay";
 }
-$url = "/games/game_details.php?id=" . $_POST['id'] . '&' . $action_message;
+$url = "/games/game_details.php?id=" . $_POST['id'] . '&actionMsg=' . $action_message;
 header("Location: $url");
