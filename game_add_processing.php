@@ -25,7 +25,6 @@ try {
 	$statement->bindParam(':image', $_POST['image'], PDO::PARAM_STR, 255);
 	$statement->bindParam(':notes', $_POST['notes'], PDO::PARAM_STR);
 	$statement->execute();
-	var_dump($statement->errorInfo());
 } catch (PDOException $e) {
 	$action_message = "errorDisplay";
 }
