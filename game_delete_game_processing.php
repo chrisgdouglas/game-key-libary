@@ -17,17 +17,16 @@ if ($owner_match !== FALSE) {
 		$statement = $db->prepare($sql);
 		$statement->bindParam(':id', $_POST['id'], PDO::PARAM_STR, 37);
 		$statement->execute();
-		// $statement->errorInfo();
 	} catch (PDOException $e) {
-		$action_message = "actionMsg=errorDeleteGame";
+		$action_message = "errorDeleteGame";
 	}
 	if (!isset($action_message)) {
-			$action_message = "actionMsg=successDeleteGame";
+			$action_message = "successDeleteGame";
 	}
 }
 else {
-	$action_message = "actionMsg=errorDeleteGame";
+	$action_message = "errorDeleteGame";
 }
 closeDBConnection($db, $statement);
-$url = "/games/?" . $action_message;
+$url = "/games/?actionMsg=" . $action_message;
 header("Location: $url");

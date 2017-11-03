@@ -23,7 +23,7 @@ if ($isAdmin && $_POST['formAction'] !== "editUser") {
 				$statement->bindParam(':user_role', $_POST['user_role'], PDO::PARAM_INT, 1);
 				$statement->execute();
 			} catch (PDOException $e) {
-				$action_message = "actionMsg=errorUpdate";
+				$action_message = "errorUpdate";
 			}
 			break;
 
@@ -35,7 +35,7 @@ if ($isAdmin && $_POST['formAction'] !== "editUser") {
 				$statement->bindParam(':email', $_POST['user_list'], PDO::PARAM_STR, 512);
 				$statement->execute();
 			} catch (PDOException $e) {
-				$action_message = "actionMsg=errorUpdate";
+				$action_message = "errorUpdate";
 			}
 			break;
 	}
@@ -80,13 +80,13 @@ if ($_POST['formAction'] == "editUser") {
 		$statement->bindParam(':old_email', $_POST['old_email'], PDO::PARAM_STR, 512);
 		$statement->execute();
 	} catch (PDOException $e) {
-		$action_message = "actionMsg=errorUpdate";
+		$action_message = "errorUpdate";
 	}
 }
 
 if (!isset($action_message)) {
-	$action_message = "actionMsg=successUpdate";
+	$action_message = "successUpdate";
 }
 
-$url = "/games/user_details.php?id=" . $_POST['id'] . '&' . $action_message;
+$url = "/games/user_details.php?id=" . $_POST['id'] . '&actionMsg=' . $action_message;
 header("Location: $url");
