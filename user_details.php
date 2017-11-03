@@ -3,26 +3,43 @@
 require_once getcwd() . '/games.config.php';
 
 $db = getDBConnect(DSN, DB_USERNAME, DB_PASSWORD);
-parse_str($_SERVER['QUERY_STRING']); //$id
-
-$user_rs = getCurrentUser($db, $id);
-
-$sql = "SELECT game_name, id, purchase_date, store, redeemed, played FROM games WHERE game_owner = :user_id ORDER BY purchase_date DESC, game_name ASC";
-$statement = $db->prepare($sql);
-$statement->bindParam(':user_id', $user_rs['id'], PDO::PARAM_STR, 37);
-$statement->execute();
-$users_games_rs = $statement->fetchAll();
-
-$isAdmin = getCurrentUser($db, $_SESSION['user_id'], TRUE);
-
-if ($isAdmin) {
-  $sql = "SELECT display_name, email FROM users";
-  $statement = $db->prepare($sql);
-  $statement->execute();
-  $admin_all_users_rs = $statement->fetchAll();
+if (isset($_GET)) {
+  $id = array_key_exists('id', $_GET) ? safe($_GET['id']) : null;
+}
+else {
+  $id = null;
+}
+if ($id !== null && strlen($id) === 0) {
+  $id = null;
+  $no_user = true;
+}
+else {
+  $no_user = false;
 }
 
-closeDBConnection($db, $statement);
+if ($no_user === false) {
+  $user_rs = getCurrentUser($db, $id);
+  if ($user_rs === false || empty($user_rs)) {
+    $no_user = true;
+  }
+  else {
+    $sql = "SELECT game_name, id, purchase_date, store, redeemed, played FROM games WHERE game_owner = :user_id ORDER BY purchase_date DESC, game_name ASC";
+    $statement = $db->prepare($sql);
+    $statement->bindParam(':user_id', $user_rs['id'], PDO::PARAM_STR, 37);
+    $statement->execute();
+    $users_games_rs = $statement->fetchAll();
+
+    $isAdmin = getCurrentUser($db, $_SESSION['user_id'], TRUE);
+
+    if ($isAdmin) {
+      $sql = "SELECT display_name, email FROM users";
+      $statement = $db->prepare($sql);
+      $statement->execute();
+      $admin_all_users_rs = $statement->fetchAll();
+    }
+  }
+  closeDBConnection($db, $statement);
+}
 
 require_once getcwd() . '/include/global_nav_inc.html';
 
@@ -32,7 +49,7 @@ require_once getcwd() . '/include/global_nav_inc.html';
 
       <div class="row">
         <div class="jumbotron text-center">
-          <h1><?php echo $user_rs['display_name'] ?>'s Profile</h1>
+          <?php if ($no_user === false) { echo "<h1>" . $user_rs['display_name'] . "'s Profile</h1>"; } ?>
         </div>
       </div>
 
@@ -93,6 +110,14 @@ require_once getcwd() . '/include/global_nav_inc.html';
               Errors in form submission. Please verify the fields highlighted in red below.
             </div>
           </div>
+          <?php
+          if ($no_user) {
+            echo "<h2>No user found.</h2>
+            <p><a href='index.php'>Go back.</a></p>
+            </div></div></div>";
+          }
+          else {
+          ?>
           <div data-id="togglable-tabs">
             <ul class="nav nav-tabs" id="myTabs" role="tablist">
               <li role="presentation" class="active">
@@ -428,5 +453,6 @@ require_once getcwd() . '/include/global_nav_inc.html';
         }
       }
     </script>
+    <?php } ?>
   </body>
 </html>

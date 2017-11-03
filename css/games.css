@@ -1,3 +1,4 @@
+/*
 .label_link {
   color: white;
   text-decoration: none;
@@ -17,4 +18,32 @@
 .label_link:active {
   color: white;
   text-decoration: none;
+}
+.game_key_link {
+  color: #337ab7;
+  text-decoration: underline;
+  cursor: pointer;
+}
+*/
+.thumbnail {
+  padding:  0px;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.cards {
+  overflow: hidden;
+  height:  180px;
+  max-height: 180px;
+}
+.container .jumbotron, .container-fluid .jumbotron {
+	border-radius:  0px;
+	background:  #00102b;
+}
+
+.jumbotron.text-center > p > img {
+	border:  1px solid #737373;
+}
+
+.jumbotron h1 {
+	color:  #ccc;
 }
