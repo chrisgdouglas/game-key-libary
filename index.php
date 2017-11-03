@@ -19,10 +19,12 @@ $sql = "SELECT ROUND(SUM(cost),2) as sum FROM games";
 $total_cost = getOne($db, $sql);
 $sql = "SELECT COUNT(id) count FROM games";
 $number_of_rows = getOne($db, $sql);
+$sql = "SELECT id FROM games WHERE played = 0 ORDER BY RAND()";
+$random_id = getOne($db, $sql);
+
 closeDBConnection($db, $statement);
 
 require_once getcwd() . '/include/global_nav_inc.html';
-
 ?>
 
     <div class="container-fluid">
@@ -32,6 +34,7 @@ require_once getcwd() . '/include/global_nav_inc.html';
             <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
             <li><a href="game_add.php">Add Game</a></li>
             <li><a href="game_image_manage.php">Manage Images</a></li>
+            <li><a href="game_details.php?id=<?php echo $random_id; ?>" title="Select an random unplayed game.">What Game Should I Play?</a></li>
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
@@ -91,9 +94,9 @@ require_once getcwd() . '/include/global_nav_inc.html';
                 </div>
                 <div class="panel-body">
                   <ul class="list-group">
-                    <li class="list-group-item"><a href="game_search.php?status=Yes">Redeemed:</a> <?php echo $redeemed_count['count']; ?></li>
-                    <li class="list-group-item"><a href="game_search.php?status=No">Not Redeemed:</a> <?php echo $not_redeemed_count['count']; ?></li>
-                    <li class="list-group-item"><a href="game_search.php?status=Gifted">Gifted:</a><?php echo $gifted_count['count']; ?></li>
+                    <li class="list-group-item"><a href="game_search.php?status=Yes">Redeemed:</a> <?php echo $redeemed_count; ?></li>
+                    <li class="list-group-item"><a href="game_search.php?status=No">Not Redeemed:</a> <?php echo $not_redeemed_count; ?></li>
+                    <li class="list-group-item"><a href="game_search.php?status=Gifted">Gifted:</a><?php echo $gifted_count; ?></li>
                   </ul>
                 </div>
               </div>
@@ -104,7 +107,7 @@ require_once getcwd() . '/include/global_nav_inc.html';
                   <h3 class="panel-title">Total Cost</h3>
                 </div>
                 <div class="panel-body">
-                  $<?php echo $total_cost['sum'] ?>
+                  $<?php echo $total_cost ?>
                 </div>
               </div>
               <div class="panel panel-default">
@@ -112,7 +115,7 @@ require_once getcwd() . '/include/global_nav_inc.html';
                   <h3 class="panel-title">Games Played</h3>
                 </div>
                 <div class="panel-body">
-                  <a href="game_search.php?status=Played"><?php echo $played_count['count'] . '</a> of <a href="game_search.php?status=NotPlayed">' . $number_of_rows['count'] . "</a>"; ?>
+                  <a href="game_search.php?status=Played"><?php echo $played_count . '</a> of <a href="game_search.php?status=NotPlayed">' . $number_of_rows . "</a>"; ?>
                 </div>
               </div>
             </div>
@@ -125,7 +128,7 @@ require_once getcwd() . '/include/global_nav_inc.html';
             ?>
             <div class="col-md-4 cards">
                 <div class="thumbnail">
-                    <img class="img-responsive center-block" src="<?php echo $games['file_path']; ?>" />
+                     <a href="game_details.php?id=<?php echo $games['id']; ?>"><img class="img-responsive center-block" src="<?php echo $games['file_path']; ?>" /></a>
                     <div class="caption">
                       <h4 class="cardTitle"><?php echo $games['game_name']; ?></h4>
 

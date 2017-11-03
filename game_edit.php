@@ -2,34 +2,55 @@
 
 require_once getcwd() . '/games.config.php';
 
-parse_str($_SERVER['QUERY_STRING']); //$id
-$db = getDBConnect(DSN, DB_USERNAME, DB_PASSWORD);
+// parse_str($_SERVER['QUERY_STRING']); //$id
 
-$sql = "SELECT g.game_name, g.game_owner, g.purchase_date, g.store, g.game_key, g.redeemed, g.cost, g.purchase_currency, g.played, g.distribution_platform, g.store_id, g.notes, g.image, g.popular_tags, images.file_path FROM games AS g LEFT JOIN images ON g.image = images.description WHERE id = :id";
+if (isset($_GET)) {
+  $id = array_key_exists('id', $_GET) ? safe($_GET['id']) : null;
+}
 
-$statement = $db->prepare($sql);
-$statement->bindParam(':id', $id, PDO::PARAM_STR, 37);
-$statement->execute();
-$game_detail_rs = $statement->fetch();
+if ($id !== null && strlen($id) === 0) {
+  $id = null;
+  $no_game = true;
+}
+else {
+  $no_game = false;
+}
 
-$sql = "SELECT platform FROM distplatform_lkup ORDER BY platform ASC";
-$distplatform_rs = dbGetRows($db, $sql);
+if ($no_game === false) {
 
-$sql = "SELECT value FROM redemption_lkup ORDER BY value ASC";
-$redemption_rs = dbGetRows($db, $sql);
+  $db = getDBConnect(DSN, DB_USERNAME, DB_PASSWORD);
 
-$sql = "SELECT store_name FROM store_lkup ORDER BY store_name ASC";
-$store_rs = dbGetRows($db, $sql);
+  $sql = "SELECT g.game_name, g.game_owner, g.purchase_date, g.store, g.game_key, g.redeemed, g.cost, g.purchase_currency, g.played, g.distribution_platform, g.store_id, g.notes, g.image, g.popular_tags, images.file_path FROM games AS g LEFT JOIN images ON g.image = images.description WHERE id = :id";
 
-$sql = "SELECT description FROM images";
-$images_rs = dbGetRows($db, $sql);
 
-$sql = "SELECT id, display_name FROM users WHERE user_role <> '0' ORDER BY display_name ASC"; // don't grab disabled users
-$users_rs = dbGetRows($db, $sql);
+  $statement = $db->prepare($sql);
+  $statement->bindParam(':id', $id, PDO::PARAM_STR, 37);
+  $statement->execute();
+  $game_detail_rs = $statement->fetch();
+  if ($game_detail_rs === false || empty($game_detail_rs)) {
+    $no_game = true;
+  }
+  else {
+    $sql = "SELECT platform FROM distplatform_lkup ORDER BY platform ASC";
+    $distplatform_rs = dbGetRows($db, $sql);
 
-$sql = "SELECT currency FROM exchange_rate ORDER BY currency ASC";
-$currency_rs = dbGetRows($db, $sql);
-closeDBConnection($db, $statement);
+    $sql = "SELECT value FROM redemption_lkup ORDER BY value ASC";
+    $redemption_rs = dbGetRows($db, $sql);
+
+    $sql = "SELECT store_name FROM store_lkup ORDER BY store_name ASC";
+    $store_rs = dbGetRows($db, $sql);
+
+    $sql = "SELECT description FROM images";
+    $images_rs = dbGetRows($db, $sql);
+
+    $sql = "SELECT id, display_name FROM users WHERE user_role <> '0' ORDER BY display_name ASC"; // don't grab disabled users
+    $users_rs = dbGetRows($db, $sql);
+
+    $sql = "SELECT currency FROM exchange_rate ORDER BY currency ASC";
+    $currency_rs = dbGetRows($db, $sql);
+    closeDBConnection($db, $statement);
+  }
+}
 
 require_once getcwd() . '/include/global_nav_inc.html';
 
@@ -60,6 +81,17 @@ require_once getcwd() . '/include/global_nav_inc.html';
               Errors in form submission. Please verify the fields highlighted in red below.
             </div>
           </div>
+          <?php
+          if ($no_game) {
+            echo "<h2>No game found.</h2>
+            <p><a href='index.php'>Go back.</a></p>
+            </div>
+            </div>
+            </div>
+            ";
+          }
+          else {
+          ?>
           <form action="/games/game_edit_processing.php" method="POST" name="editGame" onsubmit="return validateForm(this)">
           <input hidden name="id" value="<?php echo $id; ?>">
           <div class="col-xs-6">
@@ -228,5 +260,6 @@ require_once getcwd() . '/include/global_nav_inc.html';
       }
 
     </script>
+    <?php } ?>
   </body>
 </html>

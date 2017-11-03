@@ -23,7 +23,12 @@ function dbGetRows($dbh, $sql) { // all rows returned, static query
 	$statement->execute();
 	$rs_return = $statement->fetchAll();
 	$statement->closeCursor();
-	return $rs_return;
+	if ($rs_return === FALSE || empty($rs_return)) {
+		return false;
+	}
+	else {
+		return $rs_return;
+	}
 }
 
 function getOne($dbh, $sql) { // return one result, static query
@@ -32,7 +37,12 @@ function getOne($dbh, $sql) { // return one result, static query
 	$statement->execute();
 	$rs_return = $statement->fetch();
 	$statement->closeCursor();
-	return $rs_return;
+	if ($rs_return === FALSE || empty($rs_return)) {
+		return false;
+	}
+	else {
+		return $rs_return[0];
+	}
 }
 
 function closeDBConnection($dbh, $statement=null) {
