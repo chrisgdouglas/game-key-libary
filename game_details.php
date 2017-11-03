@@ -152,7 +152,7 @@ require_once getcwd() . '/include/global_nav_inc.html';
             <a class="btn btn-default" href="/games/" role="button">Back</a>
             <?php
             if ($no_game === false) {
-              echo '<a class="btn btn-primary" href="game_edit.php?id=<?php echo $id ?>">Edit Game</a>';
+              echo '<a class="btn btn-primary" href="game_edit.php?id=' . $id . '">Edit Game</a>';
             } ?>
           </div>
         </div>
