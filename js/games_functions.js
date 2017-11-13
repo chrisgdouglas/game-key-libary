@@ -68,10 +68,10 @@ function buildDropDownItems(itemArray, parentId) {
       itemText = itemArray[i].substring(0, 30) + "...";
     }
     else {
-      itemText = itemArray[i]
+      itemText = itemArray[i];
     }
     var li = document.createElement("li");
-    var anchor = document.createElement("a")
+    var anchor = document.createElement("a");
       var anchorText = document.createTextNode(itemText);
       var href = document.createAttribute("href");
         href.value = "/games/game_details.php?game_name=" + itemArray[i];
@@ -83,7 +83,7 @@ function buildDropDownItems(itemArray, parentId) {
 }
 
 function removeChildNodes(elemID) {
-  var parentNode = document.getElementById(elemID)
+  var parentNode = document.getElementById(elemID);
   if (parentNode.firstChild !== null) {
     while (parentNode.firstChild) {
       parentNode.removeChild(parentNode.firstChild);
