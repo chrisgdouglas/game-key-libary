@@ -1,6 +1,5 @@
 <?php
-require_once getcwd() . '/include/db.inc.php';
-require_once getcwd() . '/include/functions.php';
+require_once getcwd() . '/games.config.php';
 
 $db = getDBConnect(DSN, DB_USERNAME, DB_PASSWORD);
 array_walk($_POST,'wsafe');
