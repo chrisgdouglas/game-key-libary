@@ -256,7 +256,7 @@ require_once getcwd() . '/include/global_nav_inc.html';
                   <div class="form-group">
                     <div class="btn-group btn-group pull-right" role="group">
                       <a class="btn btn-default" href="/games/">Cancel</a>
-                      <button type="submit" class="btn btn-primary" id="submitForm">Get Data</button>
+                      <button type="submit" class="btn btn-primary" id="submitAjaxForm">Get Data</button>
                     </div>
                  </div>
                 </form>
@@ -338,8 +338,6 @@ require_once getcwd() . '/include/global_nav_inc.html';
 
         // Serialize the data in the form
         var serializedData = $form.serialize();
-
-        console.log(serializedData);
 
         // Let's disable the inputs for the duration of the Ajax request.
         // Note: we disable elements AFTER the form data has been serialized.
