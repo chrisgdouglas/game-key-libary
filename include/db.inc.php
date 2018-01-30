@@ -1,13 +1,5 @@
 <?php
 
-/* Start DB Config
-Modify DB information & credentials to match your system config
-*/
-define(DB_USERNAME, "games");
-define(DB_PASSWORD, "yourpassword");  // update with your DB's password
-define(DSN,"mysql:dbname=games;host=localhost");  // dbname assumed to games; update as required.
-/* End DB Config */
-
 function getDBConnect($dsn, $db_username, $db_password) {
 	try {
 	    $dbh = new PDO($dsn, $db_username, $db_password);
