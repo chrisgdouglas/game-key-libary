@@ -15,7 +15,7 @@ Game Key Library
 
 * Clone repo to your web server or dev environment
 * Create games.config.php in the root directory of the app. Contents below
-
+```
 <?php
 session_start();
 if (!$_SESSION['logged_id']) {
@@ -39,7 +39,7 @@ require_once GAMES_PATH . '/include/db.inc.php';
 if ($current_script_name !== "ajax_game_web_scrape.php") {
     require_once GAMES_PATH . '/include/functions.php';
 }
-
+```
 * Example images included, creat directory "images" and unzip images.zip to that destination
 * SQL directory contains two scripts to create the database tables, and insert example data
 
