@@ -105,3 +105,21 @@ function showValidationErrors(violations) {
   }
   $('#errorFormSubmission').removeClass('hidden');
 }
+
+function getError(errorCode, pageName) {
+  var serializedData = "id=" + errorCode + "&pageName=" + pageName;
+  request = $.ajax({
+    url: "/games/ajax_game_get_errormsg.php",
+    type: "post",
+    data: serializedData
+  });
+  request.done(function (response) {
+    var results = JSON.parse(response).map(function (i) { return i.name; });
+    if (results.length !== 0) {
+      $("#game_key span").html(JSON.parse(response));
+    }
+    else {
+      $("#game_key span").html(JSON.parse('An error occured, please try again.'));
+    }
+  });
+}
