@@ -117,7 +117,7 @@ require_once getcwd() . '/include/global_nav_inc.html';
           <table class="table table-condensed">
           <?php
             if ($no_game === false) {
-              echo buildTableContent('Game Name: ', $game_detail_rs['game_name'], "game_name");
+              echo buildTableContent('Game Name: ', htmlspecialchars($game_detail_rs['game_name'], ENT_SUBSTITUTE), "game_name");
               echo buildTableContent('Genre Tags: ', $game_detail_rs['popular_tags'], "popular_tags");
               echo buildTableContent('Purchase Date: ', $game_detail_rs['purchase_date']);
               echo buildTableContent('Store: ', $game_detail_rs['store']);

@@ -14,10 +14,13 @@ $owner_match = $statement->fetch();
 if ($owner_match !== FALSE) {
 	$sql = "DELETE FROM games WHERE id = :id";
 	try {
+		$db->beginTransaction();
 		$statement = $db->prepare($sql);
 		$statement->bindParam(':id', $_POST['id'], PDO::PARAM_STR, 37);
 		$statement->execute();
-	} catch (PDOException $e) {
+		$db->commit();
+	} catch (Exception $e) {
+		$db->rollback();
 		$action_message = "errorDeleteGame";
 	}
 	if (!isset($action_message)) {
