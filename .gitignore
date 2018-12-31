@@ -1,4 +1,4 @@
+.vscode/
+images/
 games.config.php
-.vscode/*.*
-images/*
 test*.*
