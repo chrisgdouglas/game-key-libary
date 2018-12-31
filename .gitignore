@@ -2,3 +2,7 @@
 images/
 games.config.php
 test*.*
+package.json
+package-lock.json
+.eslintrc.js
+node_modules/
