@@ -97,7 +97,7 @@ require_once getcwd() . '/include/global_nav_inc.html';
               <?php
                 foreach($game_list_rs as $games) {
                   echo "<tr>";
-                    echo buildTableContentRow($games['game_name'], $games['id']);
+                    echo buildTableContentRow(htmlspecialchars($games['game_name'], ENT_SUBSTITUTE), $games['id']);
                     echo buildTableContentRow($games['purchase_date']);
                     echo buildTableContentRow($games['store']);
                     echo buildTableContentRow($games['redeemed']);

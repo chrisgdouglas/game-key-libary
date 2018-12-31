@@ -1,11 +1,8 @@
 <?php
-require_once '/var/www/games/include/simple_html_dom.php';
-$games_path = getcwd();
-$db_username=  "username"; // update with your DB's username
-$db_password=  "yourpassword"; // update with your DB's password
-$dsn= "mysql:dbname=games;host=localhost";
+require_once getcwd() . '/games.config.php';
+require_once GAMES_PATH . '/include/simple_html_dom.php';
 
-$db = getDBConnect($dsn,$db_username,$db_password);
+$db = getDBConnect(DSN, DB_USERNAME, DB_PASSWORD);
 
 $html = new simple_html_dom();
 $ageFlag = FALSE; // if Steam's age check is in place, the expected page data will not be there, error out.
@@ -40,14 +37,15 @@ if (!isset($return_values) && isset($html) && !$ageFlag) { // everything looks g
 	}
 	$popular_tags = array_splice($popular_tags, 0, $tag_limit);
 	$game_name_raw = $html->find('div.apphub_AppName',-1)->plaintext;
-	$game_name = str_replace("’", "'", $game_name_raw); // replace &raquo; with standard apostrophe for url escaping
+	$game_name = str_replace("ï¿½", "'", $game_name_raw); // replace &raquo; with standard apostrophe for url escaping
+	$game_name = mb_convert_encoding($game_name, 'UTF-8', 'UTF-8');
 	$image_description = $game_name . " Header";
 	$image_server_src = $html->find('img.game_header_image_full',0)->src;
 	$store_id = $html->find('div[data-appid]', -1)->attr['data-appid'];
 
 // get the game's header image, copy it to local server
 		$file_name = "gameimage-" . UUID::v4() . ".jpg";
-		$destination = $games_path . "/images/" . $file_name;
+		$destination = GAMES_PATH . "/images/" . $file_name;
 		if (!copy($image_server_src, $destination)) {
 			$return_values = array(
 				"display_message" => "errorGetWebData-getimage"
@@ -59,17 +57,21 @@ if (!isset($return_values) && isset($html) && !$ageFlag) { // everything looks g
 		}
 
 // Update the database with image data
-	$sql = "INSERT INTO images (description, file_path)
-	VALUES (:description, :file_path)";
+	$sql = "INSERT INTO images (description, file_path, owner)
+	VALUES (:description, :file_path, :owner)";
 	try {
+		$db->beginTransaction();
 		$statement = $db->prepare($sql);
 		$statement->bindParam(':description', $image_description, PDO::PARAM_STR, 255);
 		$statement->bindParam(':file_path', $file_path, PDO::PARAM_STR, 728);
+		$statement->bindParam(':owner', $_SESSION['user_id'], PDO::PARAM_STR, 37);
 		$statement->execute();
-	} catch (PDOException $e) {
-			$return_values = array(
-				"display_message" => "errorGetWebData-dbimage"
-			);
+		$db->commit();
+	} catch (Exception $e) {
+		$db->rollback();
+		$return_values = array(
+			"display_message" => "errorGetWebData-dbimage"
+		);
 	}
 
 	$statement->closeCursor();
@@ -123,14 +125,4 @@ class UUID {
      mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
    );
  }
-}
-
-function getDBConnect($dsn, $db_username, $db_password) {
-	try {
-	    $dbh = new PDO($dsn, $db_username, $db_password);
-	} catch (PDOException $e) {
-	    echo "Error!: " . $e->getMessage() . "<br/>";
-	    die();
-	}
-	return $dbh;
 }

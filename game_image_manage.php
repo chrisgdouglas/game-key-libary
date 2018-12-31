@@ -6,8 +6,18 @@ $db = getDBConnect(DSN, DB_USERNAME, DB_PASSWORD);
 
 $isAdmin = getCurrentUser($db, $_SESSION['user_id'], TRUE);
 
-$sql = "SELECT description, file_path FROM images ORDER BY description ASC";
-$images_rs = dbGetRows($db, $sql);
+if ($isAdmin === FALSE) {
+  $sql = "SELECT description, file_path FROM images WHERE owner = :owner ORDER BY description ASC";
+  $statement = $db->prepare($sql);
+  $statement->bindParam(':owner', $_SESSION['user_id'], PDO::PARAM_STR, 37);
+  $statement->execute();
+  $images_rs = $statement->fetchAll();
+  $statement->closeCursor();
+} else {
+  $sql = "SELECT description, file_path FROM images ORDER BY description ASC";
+  $images_rs = dbGetRows($db, $sql);
+}
+
 closeDBConnection($db);
 
 require_once getcwd() . '/include/global_nav_inc.html';
@@ -88,7 +98,7 @@ require_once getcwd() . '/include/global_nav_inc.html';
                    <?php
                      echo buildSelectOption("", "&nbsp;");
                      foreach($images_rs as $image) {
-                       echo buildSelectOption($image['description'], $image['file_path']);
+                       echo buildSelectOption(htmlspecialchars($image['description'], ENT_SUBSTITUTE), $image['file_path']);
                      }
                    ?>
                    </select>

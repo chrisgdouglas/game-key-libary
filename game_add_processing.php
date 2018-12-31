@@ -8,6 +8,7 @@ $sql = "INSERT INTO games (id, game_name, popular_tags, game_owner, purchase_dat
 VALUES (:id, :game_name, :popular_tags, :game_owner, :purchase_date, :store, :game_key, :redeemed, :cost, :purchase_currency, :played, :distribution_platform, :store_id, :image, :notes)";
 
 try {
+	$db->beginTransaction();
 	$statement = $db->prepare($sql);
 	$statement->bindParam(':id', $id, PDO::PARAM_STR, 37);
 	$statement->bindParam(':game_name', $_POST['game_name'], PDO::PARAM_STR, 255);
@@ -25,7 +26,9 @@ try {
 	$statement->bindParam(':image', $_POST['image'], PDO::PARAM_STR, 255);
 	$statement->bindParam(':notes', $_POST['notes'], PDO::PARAM_STR);
 	$statement->execute();
-} catch (PDOException $e) {
+	$db->commit();
+} catch (Exception $e) {
+	$db->rollback();
 	$action_message = "errorDisplay";
 }
 closeDBConnection($db, $statement);

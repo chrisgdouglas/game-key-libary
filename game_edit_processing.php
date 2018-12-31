@@ -33,6 +33,7 @@ if ($owner_match !== FALSE) {
 	  id = :id";
 
 	try {
+		$db->beginTransaction();
 		$statement = $db->prepare($sql);
 		$statement->bindParam(':game_name', $_POST['game_name'], PDO::PARAM_STR, 255);
 		$statement->bindParam(':game_owner', $_POST['game_owner'], PDO::PARAM_STR, 37);
@@ -50,7 +51,9 @@ if ($owner_match !== FALSE) {
 		$statement->bindParam(':notes', $_POST['notes'], PDO::PARAM_STR);
 		$statement->bindParam(':id', $_POST['id'], PDO::PARAM_STR);
 		$statement->execute();
-	} catch (PDOException $e) {
+		$db->commit();
+	} catch (Exception $e) {
+		$db->rollback();
 		$action_message = "errorDisplay";
 	}
 	closeDBConnection($db, $statement);
