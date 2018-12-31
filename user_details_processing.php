@@ -15,6 +15,7 @@ if ($isAdmin && $_POST['formAction'] !== "editUser") {
 			$uuid = UUID::v4();;
 		  $sql = "INSERT INTO users (id, display_name, password, email, user_role) VALUES (:uuid, :display_name, :hashed_password, :email, :user_role)";
 		  try {
+				$db->beginTransaction();
 				$statement = $db->prepare($sql);
 				$statement->bindParam(':uuid', $uuid, PDO::PARAM_STR, 37);
 				$statement->bindParam(':display_name', $_POST['display_name'], PDO::PARAM_STR, 255);
@@ -22,7 +23,9 @@ if ($isAdmin && $_POST['formAction'] !== "editUser") {
 				$statement->bindParam(':email', $_POST['email'], PDO::PARAM_STR, 512);
 				$statement->bindParam(':user_role', $_POST['user_role'], PDO::PARAM_INT, 1);
 				$statement->execute();
-			} catch (PDOException $e) {
+				$db->commit();
+			} catch (Exception $e) {
+				$db->rollback();
 				$action_message = "errorUpdate";
 			}
 			break;
@@ -31,10 +34,13 @@ if ($isAdmin && $_POST['formAction'] !== "editUser") {
 		case "deleteUser":
 		  $sql = "DELETE FROM users WHERE email = :email";
 		  try {
+				$db->beginTransaction();
 				$statement = $db->prepare($sql);
 				$statement->bindParam(':email', $_POST['user_list'], PDO::PARAM_STR, 512);
 				$statement->execute();
-			} catch (PDOException $e) {
+				$db->commit();
+			} catch (Exception $e) {
+				$db->rollback();
 				$action_message = "errorUpdate";
 			}
 			break;
@@ -67,6 +73,7 @@ if ($_POST['formAction'] == "editUser") {
   $sql = $sql . " WHERE email = :old_email";
 
   try {
+		$db->beginTransaction();
 		$statement = $db->prepare($sql);
 		$statement->bindParam(':new_display_name', $_POST['new_display_name'], PDO::PARAM_STR, 255);
 		$statement->bindParam(':new_email', $_POST['new_email'], PDO::PARAM_STR, 512);
@@ -79,7 +86,9 @@ if ($_POST['formAction'] == "editUser") {
 		}
 		$statement->bindParam(':old_email', $_POST['old_email'], PDO::PARAM_STR, 512);
 		$statement->execute();
-	} catch (PDOException $e) {
+		$db->commit();
+	} catch (Exception $e) {
+		$db->rollback();
 		$action_message = "errorUpdate";
 	}
 }
