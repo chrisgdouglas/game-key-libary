@@ -10,14 +10,15 @@ $tag_limit = 4; // limits the number of genre tags stored.
 
 if (strpos($_REQUEST['steam_store_url'], 'store.steampowered.com') !== FALSE) {
 	$html->load_file($_REQUEST['steam_store_url']);
-	foreach($html->find('h2') as $element) {
-	  if ($element->plaintext == "Please enter your birth date to continue:") {
-	  	$ageFlag = TRUE;
-			$return_values = array(
-				"display_message" => "errorGetWebData-agegate"
-			);
-	  	break;
-	  }
+	$gate_text = $html->find('div#app_agegate');
+	if (count($gate_text) >= 1) {
+		$ageFlag = TRUE;
+		$return_values = array(
+			"display_message" => "errorGetWebData-agegate"
+		);
+		// clear out DOM to prevent memory leaks
+		$html->clear();
+		unset($html);
 	}
 }
 else { // something wrong with the URL; don't continue and return error.
@@ -38,6 +39,8 @@ if (!isset($return_values) && isset($html) && !$ageFlag) { // everything looks g
 	$popular_tags = array_splice($popular_tags, 0, $tag_limit);
 	$game_name_raw = $html->find('div.apphub_AppName',-1)->plaintext;
 	$game_name = str_replace("�", "'", $game_name_raw); // replace &raquo; with standard apostrophe for url escaping
+	$game_name = str_replace("™", "", $game_name);
+	$game_name = str_replace("®", "", $game_name);
 	$game_name = mb_convert_encoding($game_name, 'UTF-8', 'UTF-8');
 	$image_description = $game_name . " Header";
 	$image_server_src = $html->find('img.game_header_image_full',0)->src;

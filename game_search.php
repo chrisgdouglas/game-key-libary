@@ -12,6 +12,7 @@ else {
 }
 
 $db = getDBConnect(DSN, DB_USERNAME, DB_PASSWORD);
+$search_term = "";
 
 $sql = "SELECT game_name, id, purchase_date, store, redeemed, played FROM games";
 
