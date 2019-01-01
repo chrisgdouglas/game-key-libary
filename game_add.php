@@ -226,10 +226,10 @@ require_once getcwd() . '/include/global_nav_inc.html';
                     <select name="image" id="imageid" class="form-control">
                     <?php
                       echo buildSelectOption("", "&nbsp;");
-                      echo buildSelectOption("No Image", "No Image");
-                    foreach($images_rs as $image) {
-                      echo buildSelectOption($image['description'], $image['description']);
-                    }
+                      echo buildSelectOption("No Image", "No Image", "No Image");
+                      foreach($images_rs as $image) {
+                        echo buildSelectOption($image['description'], $image['description']);
+                      }
                     ?>
                     </select>
                   </div>
@@ -359,6 +359,7 @@ require_once getcwd() . '/include/global_nav_inc.html';
             console.log(response);
             $("#populartags").val(results["popular_tags"]);
             $("#gamename").val(results["game_name"]);
+            $("#imageid option[value='No Image']").removeAttr("selected");
             $("#imageid").append($('<option>', {value:results["description"], selected:true, text:results["description"]}));
             $("#storeid").val(results["store_id"]);
             document.querySelector('#distributionplatform [value="Steam"]').selected = true;
