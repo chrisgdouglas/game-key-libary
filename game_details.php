@@ -71,10 +71,10 @@ require_once getcwd() . '/include/global_nav_inc.html';
       <div class="row">
         <div class="jumbotron text-center">
           <?php
-            if (sizeof($game_detail_rs['file_path']) === 0) {
+            if (sizeof($game_detail_rs['file_path']) === 0 || !file_exists(substr(GAMES_PATH, 0, strrpos(GAMES_PATH, '\\') - strlen(GAMES_PATH)) . $game_detail_rs['file_path'])) {
               echo "<h1>" . $game_detail_rs['game_name'] . "</h1>";
             } else {
-              echo "<p><img class='img-responsive center-block' src='" . $game_detail_rs['file_path']. "' /></p>";
+              echo "<p><img class='img-responsive center-block' src='" . $game_detail_rs['file_path']. "' width='460' height='215' /></p>";
             }
           ?>
         </div>
