@@ -37,7 +37,8 @@
 }
 .container .jumbotron, .container-fluid .jumbotron {
 	border-radius:  0px;
-	background:  #00102b;
+  background:  #00102b;
+  background-image: radial-gradient(circle, #333343, rgb(27, 40, 56));
 }
 
 .jumbotron.text-center > p > img {
