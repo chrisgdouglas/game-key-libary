@@ -25,7 +25,7 @@ if (isset($genre)) {
 	$search_term = $genre;
 	$sql = $sql . " WHERE popular_tags LIKE CONCAT('%',:genre,'%')";
 }
-if (isset($status) && $status !== "Played" && $status != "NotPlayed") {
+if (isset($status) && $status !== "Played" && $status !== "NotPlayed") {
   $search_term = $status;
   $sql = $sql . " WHERE redeemed = :status";
 }
