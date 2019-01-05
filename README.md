@@ -9,7 +9,7 @@ Game Key Library
 * Quickly get all relevant data for the game
 * Track if you have played the game or not
 * Track your gaming expenditures
-* Have the application choose an unplayed game for you to play next.
+* Have the application choose an un-played game for you to play next.
 
 ### How do I get set up? ###
 
@@ -32,7 +32,7 @@ define('DSN', "mysql:dbname=games;host=localhost");  // dbname assumed to games;
 /* End DB Config */
 
 define('GAMES_PATH', getcwd());
-define('HTDOC_PATH', "/www/htdocs");////modifyto match your system config
+define('HTDOC_PATH', "/www/htdocs");////modify to match your system config
 
 $current_script_name = basename($_SERVER['PHP_SELF']);
 require_once GAMES_PATH . '/include/db.inc.php';
@@ -40,7 +40,7 @@ if ($current_script_name !== "ajax_game_web_scrape.php") {
     require_once GAMES_PATH . '/include/functions.php';
 }
 ```
-* Example images included, creat directory "images" and unzip images.zip to that destination
+* Example images included, create directory "images" and unzip images.zip to that destination
 * SQL directory contains two scripts to create the database tables, and insert example data
 
 ### Contribution guidelines ###
