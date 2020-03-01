@@ -51,8 +51,14 @@ if ($_POST['formAction'] == "editUser") {
 	if (array_key_exists('password', $_POST) && strlen($_POST['password']) > 0 && $_POST['password'] === $_POST['password_verify']) {
 		$has_password = TRUE;
 	}
+	else {
+		$has_password = FALSE;
+	}
 	if (array_key_exists('user_role', $_POST) && strlen($_POST['user_role']) > 0) {
 		$has_role = TRUE;
+	}
+	else {
+		$has_role = FALSE;
 	}
 	if (array_key_exists('game_key_privacy', $_POST)) {
 		$game_key_privacy = 1;
