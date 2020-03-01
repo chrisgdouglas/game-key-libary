@@ -99,6 +99,8 @@ function safe($value) {
 }
 
 function curl_api_get($app_id) {
+  $steam_api_url = "https://store.steampowered.com/api/appdetails?appids=";
+  $url = $steam_api_url . $app_id;
   $ch = curl_init();
       curl_setopt($ch, CURLOPT_AUTOREFERER, TRUE);
       curl_setopt($ch, CURLOPT_HEADER, 0);
