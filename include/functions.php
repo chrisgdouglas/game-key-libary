@@ -94,7 +94,6 @@ function safe($value) {
   }
   else {
     $value = trim(htmlentities(strip_tags($value)));
-    if(get_magic_quotes_gpc()) $value = stripslashes($value);
   }
   return $value;
 }
