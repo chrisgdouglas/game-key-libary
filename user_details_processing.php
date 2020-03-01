@@ -4,7 +4,6 @@ require_once getcwd() . '/games.config.php';
 
 $db = getDBConnect(DSN, DB_USERNAME, DB_PASSWORD);
 array_walk($_POST,'wsafe');
-parse_str($_SERVER['QUERY_STRING']); //$id
 $isAdmin = getCurrentUser($db, $_SESSION['user_id'], TRUE);
 
 if ($isAdmin && $_POST['formAction'] !== "editUser") {

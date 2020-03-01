@@ -2,7 +2,6 @@
 
 require_once getcwd() . '/games.config.php';
 
-parse_str($_SERVER['QUERY_STRING']); //$id
 $db = getDBConnect(DSN, DB_USERNAME, DB_PASSWORD);
 
 $sql = "SELECT platform FROM distplatform_lkup ORDER BY platform ASC";

@@ -2,8 +2,6 @@
 
 require_once getcwd() . '/games.config.php';
 
-// parse_str($_SERVER['QUERY_STRING']); //$id
-
 if (isset($_GET)) {
   $id = array_key_exists('id', $_GET) ? safe($_GET['id']) : null;
 }
