@@ -31,5 +31,5 @@ else {
 	$action_message = "errorDeleteGame";
 }
 closeDBConnection($db, $statement);
-$url = "/games/?actionMsg=" . $action_message;
+$url = "/?actionMsg=" . $action_message;
 header("Location: $url");

@@ -12,7 +12,7 @@ $( document ).ready(function() {
     if (searchFieldLength >= 3) { // 3 or more characters in search, fire off the AJAX calls.
       var serializedData = "game_name=" + $("#searchField").val().toString();
       request = $.ajax({
-          url: "/games/ajax_game_titlesearch.php",
+          url: "/ajax_game_titlesearch.php",
           type: "post",
           data: serializedData
       });
@@ -74,7 +74,7 @@ function buildDropDownItems(itemArray, parentId) {
     var anchor = document.createElement("a");
       var anchorText = document.createTextNode(itemText);
       var href = document.createAttribute("href");
-        href.value = "/games/game_details.php?game_name=" + itemArray[i];
+        href.value = "/game_details.php?game_name=" + itemArray[i];
       anchor.setAttributeNode(href);
       anchor.appendChild(anchorText);
     li.appendChild(anchor);

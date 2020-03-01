@@ -92,7 +92,7 @@ require_once getcwd() . '/include/global_nav_inc.html';
           }
           else {
           ?>
-          <form action="/games/game_edit_processing.php" method="POST" name="editGame" onsubmit="return validateForm(this)">
+          <form action="/game_edit_processing.php" method="POST" name="editGame" onsubmit="return validateForm(this)">
           <input hidden name="id" value="<?php echo $id; ?>">
           <div class="col-xs-6">
             <div class="form-group">
@@ -209,10 +209,10 @@ require_once getcwd() . '/include/global_nav_inc.html';
       </div>
     </div>
 
-    <script src="/games/js/jquery-3.1.1.min.js"></script>
-    <script src="/games/js/bootstrap.min.js"></script>
-    <script src="/games/js/flatpickr.min.js"></script>
-    <script src="/games/js/games_functions.js"></script>
+    <script src="/js/jquery-3.1.1.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/flatpickr.min.js"></script>
+    <script src="/js/games_functions.js"></script>
     <script>
       $( document ).ready(function() {
         flatpickr(".flatpickr", {

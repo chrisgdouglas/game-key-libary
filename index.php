@@ -147,12 +147,12 @@ require_once getcwd() . '/include/global_nav_inc.html';
         </div>
       </div>
     </div>
-    <script src="/games/js/jquery-3.1.1.min.js"></script>
-    <script src="/games/js/bootstrap.min.js"></script>
-    <script src="/games/js/moment.min.js"></script>
-    <script src="/games/js/bootstrap-sortable.js"></script>
-    <script src="/games/js/jQuery.succinct.min.js"></script>
-    <script src="/games/js/games_functions.js"></script>
+    <script src="/js/jquery-3.1.1.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/moment.min.js"></script>
+    <script src="/js/bootstrap-sortable.js"></script>
+    <script src="/js/jQuery.succinct.min.js"></script>
+    <script src="/js/games_functions.js"></script>
     <script>
       $( document ).ready(function() {
         $(function(){

@@ -80,7 +80,7 @@ require_once getcwd() . '/include/global_nav_inc.html';
                   </div>
                   <div class="form-group">
                     <div class="btn-group btn-group pull-right" role="group">
-                      <a class="btn btn-default" href="/games/">Cancel</a>
+                      <a class="btn btn-default" href="/">Cancel</a>
                       <button type="submit" class="btn btn-primary" id="submitForm">Get Data</button>
                     </div>
                  </div>
@@ -113,7 +113,7 @@ require_once getcwd() . '/include/global_nav_inc.html';
                  </div>
                   <div class="form-group">
                     <div class="btn-group btn-group pull-right" role="group">
-                      <a class="btn btn-default" href="/games/">Cancel</a>
+                      <a class="btn btn-default" href="/">Cancel</a>
                       <button type="submit" class="btn btn-primary" id="submitForm">Save Edits</button>
                     </div>
                  </div>
@@ -139,7 +139,7 @@ require_once getcwd() . '/include/global_nav_inc.html';
                   </div>
                   <div class="form-group">
                     <div class="btn-group btn-group pull-right" role="group">
-                      <a class="btn btn-default" href="/games/">Cancel</a>
+                      <a class="btn btn-default" href="/">Cancel</a>
                       <button type="submit" class="btn btn-danger" id="submitForm">Delete Image</button>
                     </div>
                  </div>
@@ -152,9 +152,9 @@ require_once getcwd() . '/include/global_nav_inc.html';
       </div>
     </div>
 
-    <script src="/games/js/jquery-3.1.1.min.js"></script>
-    <script src="/games/js/bootstrap.min.js"></script>
-    <script src="/games/js/games_functions.js"></script>
+    <script src="/js/jquery-3.1.1.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/games_functions.js"></script>
     <script>
       function validateAddForm(subForm) {
         clearValidationErrors();

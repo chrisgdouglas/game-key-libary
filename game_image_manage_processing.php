@@ -118,5 +118,5 @@ if (!isset($action_message)) {
 	$action_message = "succesImage";
 	closeDBConnection($db, $statement);
 }
-$url = "/games/?actionMsg=" . $action_message;
+$url = "/?actionMsg=" . $action_message;
 header("Location: $url");

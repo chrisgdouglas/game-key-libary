@@ -97,5 +97,5 @@ if (!isset($action_message)) {
 	$action_message = "successUpdate";
 }
 
-$url = "/games/user_details.php?id=" . $_POST['id'] . '&actionMsg=' . $action_message;
+$url = "/user_details.php?id=" . $_POST['id'] . '&actionMsg=' . $action_message;
 header("Location: $url");

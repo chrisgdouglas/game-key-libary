@@ -25,5 +25,5 @@ if ($user_data_rs) {
 }
 
 closeDBConnection($db, $statement);
-$url = "/games/user_login.php?result=" . $return_value;
+$url = "/user_login.php?result=" . $return_value;
 header("Location: $url");

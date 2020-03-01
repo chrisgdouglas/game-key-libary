@@ -2,7 +2,7 @@
 
 session_start();
 if (isset($_SESSION['logged_id'])) {
-	$url = "/games/";
+	$url = "/";
 	header("Location: $url");
 }
 ?>
@@ -20,10 +20,10 @@ if (isset($_SESSION['logged_id'])) {
     <title>Games Dashboard</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="/games/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="/games/css/dashboard.css" rel="stylesheet">
+    <link href="/css/dashboard.css" rel="stylesheet">
   </head>
   	<div class="container-flud">
   		<div class="row">
@@ -57,9 +57,9 @@ if (isset($_SESSION['logged_id'])) {
   			</div>
   		</div>
   	</div>
-  	<script src="/games/js/jquery-3.1.1.min.js"></script>
-    <script src="/games/js/bootstrap.min.js"></script>
-    <script src="/games/js/games_functions.js"></script>
+  	<script src="/js/jquery-3.1.1.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/games_functions.js"></script>
     <script>
     	$( document ).ready(function() {
     		$("#pwd_toggle").bind("click", function() {

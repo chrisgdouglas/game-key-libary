@@ -128,7 +128,7 @@ require_once getcwd() . '/include/global_nav_inc.html';
             </ul>
             <div class="tab-content" id="myTabContent">
               <div class="tab-pane fade in active" role="tabpanel" id="add" aria-labelledby="add-tab">
-                <form action="/games/game_add_processing.php" method="POST" name="addGame"  onsubmit="return validateForm(this)">
+                <form action="/game_add_processing.php" method="POST" name="addGame"  onsubmit="return validateForm(this)">
                 <div class="col-xs-6">
                   <div class="form-group">
                     <label for="gamename">Game Name</label>
@@ -239,7 +239,7 @@ require_once getcwd() . '/include/global_nav_inc.html';
                   </div>
                   <div class="form-group">
                     <div class="btn-group btn-group pull-right" role="group">
-                      <a class="btn btn-default" href="/games/">Cancel</a>
+                      <a class="btn btn-default" href="/">Cancel</a>
                       <button type="submit" class="btn btn-primary" id="submitForm">Add Game</button>
                     </div>
                  </div>
@@ -255,7 +255,7 @@ require_once getcwd() . '/include/global_nav_inc.html';
                   </div>
                   <div class="form-group">
                     <div class="btn-group btn-group pull-right" role="group">
-                      <a class="btn btn-default" href="/games/">Cancel</a>
+                      <a class="btn btn-default" href="/">Cancel</a>
                       <button type="submit" class="btn btn-primary" id="submitForm">Get Data</button>
                     </div>
                  </div>
@@ -269,10 +269,10 @@ require_once getcwd() . '/include/global_nav_inc.html';
       </div>
     </div>
 
-    <script src="/games/js/jquery-3.1.1.min.js"></script>
-    <script src="/games/js/bootstrap.min.js"></script>
-    <script src="/games/js/flatpickr.min.js"></script>
-    <script src="/games/js/games_functions.js"></script>
+    <script src="/js/jquery-3.1.1.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/flatpickr.min.js"></script>
+    <script src="/js/games_functions.js"></script>
     <script>
 
       function validateForm(subForm) {
@@ -348,7 +348,7 @@ require_once getcwd() . '/include/global_nav_inc.html';
 
         // Fire off the request to ajax_game_web_scrape.php
         request = $.ajax({
-            url: "/games/ajax_game_web_scrape.php",
+            url: "/ajax_game_web_scrape.php",
             type: "post",
             data: serializedData
         });

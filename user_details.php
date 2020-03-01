@@ -139,7 +139,7 @@ require_once getcwd() . '/include/global_nav_inc.html';
             </ul>
             <div class="tab-content" id="myTabContent">
               <div class="tab-pane fade in active" role="tabpanel" id="edit" aria-labelledby="edit-tab">
-                <form action="/games/user_details_processing.php" method="POST" name="editUser" id="editUserID" onsubmit="return validateEditForm(this)">
+                <form action="/user_details_processing.php" method="POST" name="editUser" id="editUserID" onsubmit="return validateEditForm(this)">
                   <input type="hidden" name="formAction" value="editUser" />
                   <input type="hidden" name="old_email" id="oldemail" value="<?php echo $user_rs['email']; ?>" />
                   <input type="hidden" name="id" value="<?php echo $id ?>" />
@@ -201,7 +201,7 @@ require_once getcwd() . '/include/global_nav_inc.html';
                   <div class="form-group">
                     <br />
                     <div class="btn-group btn-group pull-right" role="group">
-                      <a class="btn btn-default" href="/games/">Cancel</a>
+                      <a class="btn btn-default" href="/">Cancel</a>
                       <button type="submit" class="btn btn-primary" id="submitForm">Save User Edits</button>
                     </div>
                  </div>
@@ -243,7 +243,7 @@ require_once getcwd() . '/include/global_nav_inc.html';
              <?php if ($isAdmin) { ?>
               <div class="tab-pane fade in" role="tabpanel" id="adduser" aria-labelledby="adduser-tab">
                 <br />
-                <form action="/games/user_details_processing.php" method="POST" name="addUser" id="addUserId" onsubmit="return validateAddForm(this)">
+                <form action="/user_details_processing.php" method="POST" name="addUser" id="addUserId" onsubmit="return validateAddForm(this)">
                   <input type="hidden" name="formAction" value="addUser" />
                   <input type="hidden" name="id" value="<?php echo $id ?>" />
                   <div class="form-group">
@@ -276,14 +276,14 @@ require_once getcwd() . '/include/global_nav_inc.html';
                   <div class="form-group">
                     <br />
                     <div class="btn-group btn-group pull-right" role="group">
-                      <a class="btn btn-default" href="/games/">Cancel</a>
+                      <a class="btn btn-default" href="/">Cancel</a>
                       <button type="submit" class="btn btn-primary" id="submitForm">Add User</button>
                     </div>
                  </div>
                 </form>
               </div>
               <div class="tab-pane fade in" role="tabpanel" id="deleteuser" aria-labelledby="deleteuser-tab">
-                <form action="/games/user_details_processing.php" method="POST" name="deleteUser" id="deleteUserID" onsubmit="return verifyDelete();">
+                <form action="/user_details_processing.php" method="POST" name="deleteUser" id="deleteUserID" onsubmit="return verifyDelete();">
                   <input type="hidden" name="formAction" value="deleteUser" />
                   <input type="hidden" name="id" value="<?php echo $id ?>" />
                   <div class="form-group">
@@ -300,7 +300,7 @@ require_once getcwd() . '/include/global_nav_inc.html';
                   <div class="form-group">
                     <br />
                     <div class="btn-group btn-group pull-right" role="group">
-                      <a class="btn btn-default" href="/games/">Cancel</a>
+                      <a class="btn btn-default" href="/">Cancel</a>
                       <button type="submit" class="btn btn-danger" id="submitForm">Delete User</button>
                     </div>
                  </div>
@@ -315,11 +315,11 @@ require_once getcwd() . '/include/global_nav_inc.html';
       </div>
     </div>
 
-    <script src="/games/js/jquery-3.1.1.min.js"></script>
-    <script src="/games/js/bootstrap.min.js"></script>
-    <script src="/games/js/moment.min.js"></script>
-    <script src="/games/js/bootstrap-sortable.js"></script>
-    <script src="/games/js/games_functions.js"></script>
+    <script src="/js/jquery-3.1.1.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/moment.min.js"></script>
+    <script src="/js/bootstrap-sortable.js"></script>
+    <script src="/js/games_functions.js"></script>
     <script>
       var isAdmin = <?php echo $isAdmin ? 'true': 'false'; ?>;
       $( document ).ready(function() {
@@ -418,7 +418,7 @@ require_once getcwd() . '/include/global_nav_inc.html';
         var serializedData = "user_list=" + passedVal;
 
         request = $.ajax({
-            url: "/games/ajax_user_get_details.php",
+            url: "/ajax_user_get_details.php",
             type: "post",
             data: serializedData
         });

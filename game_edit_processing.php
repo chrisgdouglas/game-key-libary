@@ -64,5 +64,5 @@ if ($owner_match !== FALSE) {
 else {
 	$action_message = "actionMsg=errorDisplay";
 }
-$url = "/games/game_details.php?id=" . $_POST['id'] . '&actionMsg=' . $action_message;
+$url = "/game_details.php?id=" . $_POST['id'] . '&actionMsg=' . $action_message;
 header("Location: $url");

@@ -35,5 +35,5 @@ closeDBConnection($db, $statement);
 if (!isset($action_message)) {
 		$action_message = "succesAdd";
 }
-$url = "/games/game_details.php?id=" . $id . "&actionMsg=" . $action_message;
+$url = "/game_details.php?id=" . $id . "&actionMsg=" . $action_message;
 header("Location: $url");

@@ -138,7 +138,7 @@ require_once getcwd() . '/include/global_nav_inc.html';
       <div class="row">
         <div class="col-xs-1">
           <div class="pull-left" role="group">
-            <form name="deleteGame" action="/games/game_delete_game_processing.php" method="post" onsubmit="return confirm('Delete game?');">
+            <form name="deleteGame" action="/game_delete_game_processing.php" method="post" onsubmit="return confirm('Delete game?');">
               <input type="hidden" name="id" value="<?php echo $id ?>" />
               <?php
               if ($no_game === false) {
@@ -149,7 +149,7 @@ require_once getcwd() . '/include/global_nav_inc.html';
         </div>
         <div class="col-xs-11">
           <div class="btn-group btn-group pull-right" role="group">
-            <a class="btn btn-default" href="/games/" role="button">Back</a>
+            <a class="btn btn-default" href="/" role="button">Back</a>
             <?php
             if ($no_game === false) {
               echo '<a class="btn btn-primary" href="game_edit.php?id=' . $id . '">Edit Game</a>';
@@ -158,9 +158,9 @@ require_once getcwd() . '/include/global_nav_inc.html';
         </div>
       </div>
     </div>
-    <script src="/games/js/jquery-3.1.1.min.js"></script>
-    <script src="/games/js/bootstrap.min.js"></script>
-    <script src="/games/js/games_functions.js"></script>
+    <script src="/js/jquery-3.1.1.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/games_functions.js"></script>
     <script>
       // add link buttons to "Game Name" field
       var steamLink = "<?php echo $steamLink ?>";
@@ -205,7 +205,7 @@ require_once getcwd() . '/include/global_nav_inc.html';
           var serializedData = "id=<?php echo $game_detail_rs['id'] ?>";
 
           request = $.ajax({
-              url: "/games/ajax_game_get_key.php",
+              url: "/ajax_game_get_key.php",
               type: "post",
               data: serializedData
           });
