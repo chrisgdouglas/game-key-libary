@@ -3,9 +3,9 @@
 function buildSelectOption($display, $value, $selected_value=null) {
   $dom = new DOMDocument();
   $dom->formatOutput = true;
-  $option = $dom->createElement('option', $display);
+  $option = $dom->createElement('option', mb_convert_encoding($display, "ISO-8859-1"));
   $optvalue = $dom->createAttribute('value');
-  $optvalue->value = $value;
+  $optvalue->value = mb_convert_encoding($value, "ISO-8859-1");
   $option->appendChild($optvalue);
 
   if ($selected_value !== null && $value === $selected_value) {
