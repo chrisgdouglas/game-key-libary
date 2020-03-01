@@ -18,40 +18,27 @@ Game Key Library
 ```
 <?php
 if (session_status() == PHP_SESSION_NONE) {
-    session_start();
+	session_start();
 }
-if (!$_SESSION['logged_id']) {
-    $url = "user_login.php";
-    header("Location: $url");
+if (isset($_SESSION['logged_in']) && $_SESSION['logged_id'] === FALSE) {
+	$url = "/user_login.php";
+	header("Location: $url");
 }
 
 /* Start DB Config
 Modify DB information & credentials to match your system config
- */
-define('DB_USERNAME', "your_db_username"); // update with your DB's username
-define('DB_PASSWORD', "your_db_password");  // update with your DB's password
-define('DSN', "mysql:dbname=games;host=localhost");  // dbname assumed to games; update as required.
+*/
+define("DB_USERNAME", "username");
+define("DB_PASSWORD", "password");
+define("DSN","mysql:dbname=games;host=127.0.0.1");
 /* End DB Config */
 
-define('GAMES_PATH', getcwd());
-define('HTDOC_PATH', "/www/htdocs");////modify to match your system config
+define("GAMES_PATH", getcwd());
+define("HTDOC_PATH", "/var/www/htdocs/"); // modify to match your system config
 
-$current_script_name = basename($_SERVER['PHP_SELF']);
 require_once GAMES_PATH . '/include/db.inc.php';
-if ($current_script_name !== "ajax_game_web_scrape.php") {
-    require_once GAMES_PATH . '/include/functions.php';
-}
+require_once GAMES_PATH . '/include/functions.php';
+
 ```
-* Example images included, create directory "images" and unzip images.zip to that destination
+* Example images included, create directories "/images/games/" and unzip images.zip to that destination
 * SQL directory contains two scripts to create the database tables, and insert example data
-
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
