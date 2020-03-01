@@ -24,7 +24,7 @@ function buildTableContent($content_label, $content_data, $html_id=null) {
   $dom->formatOutput = true;
   $tr = $dom->createElement('tr');
   $td_label = $dom->createElement('td', $content_label);
-  $td_content = $dom->createElement('td', $content_data);
+  $td_content = $dom->createElement('td', htmlentities($content_data));
   $td_label->setAttribute('nowrap', "");
   if ($html_id !== null) {
     $td_content->setAttribute('id', $html_id);
