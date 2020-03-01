@@ -59,11 +59,12 @@ require_once getcwd() . '/include/global_nav_inc.html';
     <div class="container-fluid">
       <div class="row">
         <div class="jumbotron text-center">
-          <?php
-            if (sizeof($game_detail_rs['file_path']) === 0) {
+        <?php
+            $file_name_tmp = GAMES_PATH . $game_detail_rs['file_path'];
+            if (strlen($game_detail_rs['file_path']) === 0 || !file_exists($file_name_tmp)) {
               echo "<h1>" . $game_detail_rs['game_name'] . "</h1>";
             } else {
-              echo "<p><img src='" . $game_detail_rs['file_path']. "' /></p>";
+              echo "<p><img class='img-responsive center-block' src='" . $game_detail_rs['file_path']. "' width='460' height='215' alt='" . $game_detail_rs['game_name'] . "' title='". $game_detail_rs['game_name'] ."' /></p>";
             }
           ?>
         </div>

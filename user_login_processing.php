@@ -12,7 +12,9 @@ $user_data_rs = $statement->fetch();
 
 if ($user_data_rs) {
 	if (password_verify($_POST['password'], $user_data_rs['password'])) {
-		session_start();
+		if (session_status() == PHP_SESSION_NONE) {
+			session_start();
+		}
 		$_SESSION['logged_id'] = "1";
 		$_SESSION['user_id'] = $user_data_rs['id'];
 		$_SESSION['game_key_privacy'] = (int)$user_data_rs['game_key_privacy'];
