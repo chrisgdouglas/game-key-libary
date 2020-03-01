@@ -17,7 +17,9 @@ Game Key Library
 * Create games.config.php in the root directory of the app. Contents below
 ```
 <?php
-session_start();
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 if (!$_SESSION['logged_id']) {
     $url = "user_login.php";
     header("Location: $url");
