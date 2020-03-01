@@ -347,7 +347,7 @@ require_once getcwd() . '/include/global_nav_inc.html';
 
         // Fire off the request to ajax_game_web_scrape.php
         request = $.ajax({
-            url: "/ajax_game_web_scrape.php",
+            url: "/ajax_game_steam_api.php",
             type: "post",
             data: serializedData
         });
